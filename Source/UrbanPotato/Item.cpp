@@ -25,6 +25,7 @@ void AItem::NotifyActorBeginOverlap(AActor* OtherActor)
 	Super::NotifyActorBeginOverlap(OtherActor);
 	APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(OtherActor);
 	PlayerCharacter->AddtoItemInventory(itemID);
+	Destroy();
 }
 
 // Called every frame

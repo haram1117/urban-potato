@@ -13,5 +13,5 @@ UCLASS()
 class URBANPOTATO_API AUrbanPotatoGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
-	
+	AUrbanPotatoGameModeBase();
 };

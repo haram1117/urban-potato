@@ -6,6 +6,9 @@
 #include "Item.h"
 #include "GameFramework/Character.h"
 #include "Engine.h"
+#include "InventoryWidget.h"
+#include "MyPlayerController.h"
+#include "Blueprint/UserWidget.h"
 #include "PlayerCharacter.generated.h"
 
 
@@ -17,7 +20,9 @@ class URBANPOTATO_API APlayerCharacter : public ACharacter
 public:
 	// Sets default values for this character's properties
 	APlayerCharacter();
-	
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UInventoryWidget> inventoryWidget;
+	UInventoryWidget* InventoryWidget;
 
 protected:
 	// Called when the game starts or when spawned
@@ -26,6 +31,8 @@ protected:
 	TArray<int> itemInventory;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UDataTable* itemDatabase;
+	AMyPlayerController* PlayerController; 
+	
 
 public:	
 	// Called every frame
@@ -47,5 +54,7 @@ public:
 	void RunEnd();
 
 	void AddtoItemInventory(int itemID);
+
+	void SetPlayerController(AMyPlayerController* Controller);
 	
 };
