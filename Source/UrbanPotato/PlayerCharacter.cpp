@@ -37,6 +37,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &APlayerCharacter::JumpEnd);
 	PlayerInputComponent->BindAction("Run", IE_Pressed, this, &APlayerCharacter::RunStart);
 	PlayerInputComponent->BindAction("Run", IE_Released, this, &APlayerCharacter::RunEnd);
+	PlayerInputComponent->BindAction("Interaction", IE_Pressed, this, &APlayerCharacter::Interact);
 }
 
 void APlayerCharacter::MoveForward(float value)
@@ -71,17 +72,30 @@ void APlayerCharacter::RunEnd()
 	GetCharacterMovement()->MaxWalkSpeed = 600;
 }
 
+void APlayerCharacter::Interact()
+{
+	if(UsingItem != nullptr)
+		UsingItem->Use();
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, "Nono");
+	}
+}
+
 void APlayerCharacter::AddtoItemInventory(int itemID)
 {
 	itemInventory.Add(itemID);
 	FItemStruct* ItemStruct = itemDatabase->FindRow<FItemStruct>(*FString::FromInt(itemID), TEXT(""));
-	// UE_LOG(LogTemp, Log, TEXT("%d 추가 되었습니다."), itemID);
-	//
-	// GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT(" %s 가 추가되었습니다. "), *ItemStruct->itemName));
 	PlayerController->SetSlotImage(ItemStruct);
 }
 
 void APlayerCharacter::SetPlayerController(AMyPlayerController* player_Controller)
 {
 	PlayerController = player_Controller;
+}
+
+FItemStruct* APlayerCharacter::FindItemFromRow(int itemID)
+{
+	FItemStruct* ItemStruct = itemDatabase->FindRow<FItemStruct>(*FString::FromInt(itemID), TEXT(""));
+	return ItemStruct;
 }

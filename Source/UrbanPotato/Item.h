@@ -28,7 +28,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	virtual void GetItem();
-	virtual void Use();
+	UFUNCTION(BlueprintImplementableEvent)
+	void Use();
 	virtual void TakeOut();
 };
 

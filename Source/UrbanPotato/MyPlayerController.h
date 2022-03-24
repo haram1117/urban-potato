@@ -16,10 +16,11 @@ UCLASS()
 class URBANPOTATO_API AMyPlayerController : public APlayerController
 {
 	GENERATED_BODY()
-	UInventoryWidget* InventoryWidget;
 
 	virtual void OnPossess(APawn* InPawn) override;
 public:
 	
+	UInventoryWidget* InventoryWidget;
 	void SetSlotImage(FItemStruct* ItemStruct);
+	AItem* CastAItem(TSubclassOf<AItem>);
 };

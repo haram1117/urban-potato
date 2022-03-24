@@ -31,3 +31,8 @@ void AMyPlayerController::SetSlotImage(FItemStruct* ItemStruct)
 		UE_LOG(LogTemp, Error, TEXT("HI"));
 	}
 }
+
+AItem* AMyPlayerController::CastAItem(TSubclassOf<AItem> itemClass)
+{
+	return Cast<AItem>(itemClass);
+}

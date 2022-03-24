@@ -22,13 +22,18 @@ public:
 	APlayerCharacter();
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UInventoryWidget> inventoryWidget;
-	UInventoryWidget* InventoryWidget;
+	// UInventoryWidget* Inventory;
+	/**
+	 * @brief 사용하고 있는 item
+	 */
+	AItem* UsingItem;
+	int usingItemButtonNum;
+	TArray<int> itemInventory;
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	bool bPressedRun = false;
-	TArray<int> itemInventory;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UDataTable* itemDatabase;
 	AMyPlayerController* PlayerController; 
@@ -53,8 +58,12 @@ public:
 	void RunStart();
 	void RunEnd();
 
+	void Interact();
+	
 	void AddtoItemInventory(int itemID);
 
 	void SetPlayerController(AMyPlayerController* Controller);
+
+	FItemStruct* FindItemFromRow(int itemID);
 	
 };

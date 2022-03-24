@@ -34,4 +34,7 @@ public:
 	void HideItemDesc();
 
 	void SetDescText(FString itemName, FString descText);
+
+	UFUNCTION(BlueprintCallable)
+	void SetCharacterUsingItem();
 };

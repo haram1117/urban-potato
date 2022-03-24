@@ -37,10 +37,7 @@ void AItem::Tick(float DeltaTime)
 
 void AItem::GetItem()
 {
-}
-
-void AItem::Use()
-{
+	
 }
 
 void AItem::TakeOut()
