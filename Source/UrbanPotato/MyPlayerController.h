@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "InventoryWidget.h"
 #include "Item.h"
+#include "itemPanel.h"
 #include "GameFramework/PlayerController.h"
 #include "Blueprint/UserWidget.h"
 #include "MyPlayerController.generated.h"
@@ -21,6 +22,9 @@ class URBANPOTATO_API AMyPlayerController : public APlayerController
 public:
 	
 	UInventoryWidget* InventoryWidget;
+	UitemPanel* ItemPanelWidget;
 	void SetSlotImage(FItemStruct* ItemStruct);
-	AItem* CastAItem(TSubclassOf<AItem>);
+	void SetItemPanel(FString itemName, FString descText);
+	void ShowItemPanel(int slotID);
+	void HideItemPanel(int slotID);
 };

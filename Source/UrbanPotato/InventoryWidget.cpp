@@ -7,28 +7,42 @@
 #include "Components/CanvasPanel.h"
 #include "Components/TextBlock.h"
 
-void UInventoryWidget::ShowItemDesc()
+void UInventoryWidget::ButtonsInitialize()
 {
-	ItemPanel->SetVisibility(ESlateVisibility::Visible);
+	Buttons.Add(SlotButton0);
+	Buttons.Add(SlotButton1);
+	Buttons.Add(SlotButton2);
+	Buttons.Add(SlotButton3);
+	Buttons.Add(SlotButton4);
+	Buttons.Add(SlotButton5);
+	Buttons.Add(SlotButton6);
+	Buttons.Add(SlotButton7);
+	Buttons.Add(SlotButton8);
+	Buttons.Add(SlotButton9);
 }
 
-void UInventoryWidget::HideItemDesc()
+void UInventoryWidget::ShowItemDesc(int slotID)
 {
-	ItemPanel->SetVisibility(ESlateVisibility::Hidden);
+	Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0))->ShowItemPanel(slotID);
+}
+
+void UInventoryWidget::HideItemDesc(int slotID)
+{
+	Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0))->HideItemPanel(slotID);
 }
 
 void UInventoryWidget::SetDescText(FString itemName, FString descText)
 {
-	ItemName->SetText(FText::FromString(itemName));
-	DescText->SetText(FText::FromString(descText));
+	Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0))->SetItemPanel(itemName, descText);
 }
 
-void UInventoryWidget::SetCharacterUsingItem()
+void UInventoryWidget::SetCharacterUsingItem(int slotID)
 {
 	APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-	PlayerCharacter->usingItemButtonNum = 0;
+	if(PlayerCharacter->itemInventory.Num() -1 < slotID)
+		return;
+	PlayerCharacter->usingItemButtonNum = slotID;
 	int itemID = PlayerCharacter->itemInventory[PlayerCharacter->usingItemButtonNum];
 	TSubclassOf<AItem> itemClass = PlayerCharacter->FindItemFromRow(itemID)->itemClass;
-	PlayerCharacter->UsingItem = Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0))->CastAItem(itemClass);
-	UE_LOG(LogTemp, Error, TEXT("%d"), PlayerCharacter->UsingItem->itemID);
+	PlayerCharacter->UsingItem = itemClass.GetDefaultObject();
 }
