@@ -14,11 +14,11 @@ void AMyPlayerController::OnPossess(APawn* InPawn)
 	APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(this->GetCharacter());
 	PlayerCharacter->SetPlayerController(this);
 	InventoryWidget = CreateWidget<UInventoryWidget>(this, PlayerCharacter->inventoryWidget);
-	ItemPanelWidget = CreateWidget<UitemPanel>(this);
-	if(ItemPanelWidget != nullptr)
+	itemPanel = CreateWidget<UitemPanel>(this, PlayerCharacter->ItemPanelWidget);
+	if(itemPanel != nullptr)
 	{
-		ItemPanelWidget->AddToViewport();
-		ItemPanelWidget->SetVisibility(ESlateVisibility::Hidden);
+		itemPanel->AddToViewport();
+		itemPanel->SetVisibility(ESlateVisibility::Collapsed);
 	}
 	if(InventoryWidget != nullptr)
 	{
@@ -44,8 +44,8 @@ void AMyPlayerController::SetSlotImage(FItemStruct* ItemStruct)
 
 void AMyPlayerController::SetItemPanel(FString itemName, FString descText)
 {
-	ItemPanelWidget->ItemName->SetText(FText::FromString(itemName));
-	ItemPanelWidget->DescText->SetText(FText::FromString(descText));
+	itemPanel->ItemName->SetText(FText::FromString(itemName));
+	itemPanel->DescText->SetText(FText::FromString(descText));
 }
 
 void AMyPlayerController::ShowItemPanel(int slotID)
@@ -58,8 +58,8 @@ void AMyPlayerController::ShowItemPanel(int slotID)
 	float x;
 	float y;
 	GetMousePosition(x, y);
-	ItemPanelWidget->SetPositionInViewport(FVector2D(x, y));
-	ItemPanelWidget->ItemPanel->SetVisibility(ESlateVisibility::Visible);
+	itemPanel->SetPositionInViewport(FVector2D(x, y));
+	itemPanel->SetVisibility(ESlateVisibility::Visible);
 }
 
 void AMyPlayerController::HideItemPanel(int slotID)
@@ -67,5 +67,5 @@ void AMyPlayerController::HideItemPanel(int slotID)
 	APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(this->GetCharacter());
 	if(PlayerCharacter->itemInventory.Num() -1 < slotID)
 		return;
-	ItemPanelWidget->ItemPanel->SetVisibility(ESlateVisibility::Hidden);
+	itemPanel->SetVisibility(ESlateVisibility::Collapsed);
 }

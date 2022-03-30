@@ -22,7 +22,7 @@ class URBANPOTATO_API AMyPlayerController : public APlayerController
 public:
 	
 	UInventoryWidget* InventoryWidget;
-	UitemPanel* ItemPanelWidget;
+	UitemPanel* itemPanel;
 	void SetSlotImage(FItemStruct* ItemStruct);
 	void SetItemPanel(FString itemName, FString descText);
 	void ShowItemPanel(int slotID);

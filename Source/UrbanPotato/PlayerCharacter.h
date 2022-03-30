@@ -22,6 +22,8 @@ public:
 	APlayerCharacter();
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UInventoryWidget> inventoryWidget;
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UitemPanel> ItemPanelWidget;
 	// UInventoryWidget* Inventory;
 	/**
 	 * @brief 사용하고 있는 item
