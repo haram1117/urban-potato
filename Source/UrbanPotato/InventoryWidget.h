@@ -4,8 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "itemPanel.h"
+#include "ItemSlot.h"
 #include "Blueprint/UserWidget.h"
-#include "Components/Button.h"
 #include "InventoryWidget.generated.h"
 
 /**
@@ -20,39 +20,46 @@ class URBANPOTATO_API UInventoryWidget : public UUserWidget
 	
 public:
 	UPROPERTY(meta=(BindWidget))
-	class UButton* SlotButton0;
+	class UItemSlot* SlotButton0;
 	UPROPERTY(meta=(BindWidget))
-	class UButton* SlotButton1;
+	class UItemSlot* SlotButton1;
 	UPROPERTY(meta=(BindWidget))
-	class UButton* SlotButton2;
+	class UItemSlot* SlotButton2;
 	UPROPERTY(meta=(BindWidget))
-	class UButton* SlotButton3;
+	class UItemSlot* SlotButton3;
 	UPROPERTY(meta=(BindWidget))
-	class UButton* SlotButton4;
+	class UItemSlot* SlotButton4;
 	UPROPERTY(meta=(BindWidget))
-	class UButton* SlotButton5;
+	class UItemSlot* SlotButton5;
 	UPROPERTY(meta=(BindWidget))
-	class UButton* SlotButton6;
+	class UItemSlot* SlotButton6;
 	UPROPERTY(meta=(BindWidget))
-	class UButton* SlotButton7;
+	class UItemSlot* SlotButton7;
 	UPROPERTY(meta=(BindWidget))
-	class UButton* SlotButton8;
+	class UItemSlot* SlotButton8;
 	UPROPERTY(meta=(BindWidget))
-	class UButton* SlotButton9;
+	class UItemSlot* SlotButton9;
 
+	
 	UPROPERTY(EditAnywhere)
-	TArray<UButton*> Buttons;
+	TArray<UItemSlot*> Buttons;
 
+	UClass* widget_itemTooltipClass;
+
+	
 	TSubclassOf<UitemPanel> itempanel;
 	void ButtonsInitialize();
-	UFUNCTION(BlueprintCallable)
-	void ShowItemDesc(int slotID);
-
-	UFUNCTION(BlueprintCallable)
-	void HideItemDesc(int slotID);
-
-	void SetDescText(FString itemName, FString descText);
+	// UFUNCTION(BlueprintCallable)
+	// void ShowItemDesc(int slotID);
+	//
+	// UFUNCTION(BlueprintCallable)
+	// void HideItemDesc(int slotID);
+	//
+	// void SetDescText(FString itemName, FString descText);
 
 	UFUNCTION(BlueprintCallable)
 	void SetCharacterUsingItem(int slotID);
+
+	void UpdateSlot(int slotIndex);
+
 };

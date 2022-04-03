@@ -23,8 +23,8 @@ public:
 	
 	UInventoryWidget* InventoryWidget;
 	UitemPanel* itemPanel;
-	void SetSlotImage(FItemStruct* ItemStruct);
-	void SetItemPanel(FString itemName, FString descText);
-	void ShowItemPanel(int slotID);
-	void HideItemPanel(int slotID);
+	void SetSlotItemToEmptySlot(FItemStruct* ItemStruct);
+	// void SetItemPanel(FString itemName, FString descText);
+	// void ShowItemPanel(int slotID);
+	// void HideItemPanel(int slotID);
 };

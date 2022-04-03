@@ -31,6 +31,7 @@ public:
 	AItem* UsingItem;
 	int usingItemButtonNum;
 	TArray<int> itemInventory;
+	TArray<FItemStruct*> inventory;
 
 protected:
 	// Called when the game starts or when spawned
@@ -67,5 +68,7 @@ public:
 	void SetPlayerController(AMyPlayerController* Controller);
 
 	FItemStruct* FindItemFromRow(int itemID);
+	
+	void RemoveFromItemInventory(FItemStruct* removeItem);
 	
 };

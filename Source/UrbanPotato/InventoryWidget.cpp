@@ -19,30 +19,53 @@ void UInventoryWidget::ButtonsInitialize()
 	Buttons.Add(SlotButton7);
 	Buttons.Add(SlotButton8);
 	Buttons.Add(SlotButton9);
+	UBlueprintGeneratedClass* BPCWidget_itemTooltipClass = LoadObject<UBlueprintGeneratedClass>(NULL, TEXT("WidgetBlueprint'/Game/Base/Widgets/BP_ItemPanel.BP_ItemPanel_C'"), NULL, LOAD_None, NULL);
+	widget_itemTooltipClass = Cast<UClass>(BPCWidget_itemTooltipClass);
 }
 
-void UInventoryWidget::ShowItemDesc(int slotID)
-{
-	Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0))->ShowItemPanel(slotID);
-}
-
-void UInventoryWidget::HideItemDesc(int slotID)
-{
-	Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0))->HideItemPanel(slotID);
-}
-
-void UInventoryWidget::SetDescText(FString itemName, FString descText)
-{
-	Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0))->SetItemPanel(itemName, descText);
-}
+// void UInventoryWidget::ShowItemDesc(int slotID)
+// {
+// 	Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0))->ShowItemPanel(slotID);
+// }
+//
+// void UInventoryWidget::HideItemDesc(int slotID)
+// {
+// 	Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0))->HideItemPanel(slotID);
+// }
+//
+// void UInventoryWidget::SetDescText(FString itemName, FString descText)
+// {
+// 	Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0))->SetItemPanel(itemName, descText);
+// }
 
 void UInventoryWidget::SetCharacterUsingItem(int slotID)
 {
-	APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-	if(PlayerCharacter->itemInventory.Num() -1 < slotID)
-		return;
-	PlayerCharacter->usingItemButtonNum = slotID;
-	int itemID = PlayerCharacter->itemInventory[PlayerCharacter->usingItemButtonNum];
-	TSubclassOf<AItem> itemClass = PlayerCharacter->FindItemFromRow(itemID)->itemClass;
-	PlayerCharacter->UsingItem = itemClass.GetDefaultObject();
+	if(Buttons[slotID] != nullptr)
+		Buttons[slotID]->SetUsingItem();
 }
+
+void UInventoryWidget::UpdateSlot(int slotIndex)
+{
+	UItemSlot* ItemSlot;
+	ItemSlot = Buttons[slotIndex];
+	if(ItemSlot->IsEmpty())
+	{
+		ItemSlot->SetToolTip(nullptr);
+	}
+	else
+	{
+		if(ItemSlot->ToolTipWidget != nullptr) //툴팁 이미 생성되어있음
+		{
+			// 툴팁 정보만 변경
+		}
+		else
+		{
+			UitemPanel* UitemPanel;
+			UitemPanel = CreateWidget<class UitemPanel>(this, widget_itemTooltipClass);
+			UitemPanel->SetItemInfo(ItemSlot->GetSlotItem());
+			ItemSlot->SetToolTip(UitemPanel);
+		}
+	}
+}
+
+

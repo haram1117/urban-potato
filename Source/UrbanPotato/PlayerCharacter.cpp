@@ -84,9 +84,10 @@ void APlayerCharacter::Interact()
 
 void APlayerCharacter::AddtoItemInventory(int itemID)
 {
-	itemInventory.Add(itemID);
+	// itemInventory.Add(itemID);
 	FItemStruct* ItemStruct = itemDatabase->FindRow<FItemStruct>(*FString::FromInt(itemID), TEXT(""));
-	PlayerController->SetSlotImage(ItemStruct);
+	inventory.Add(ItemStruct);
+	PlayerController->SetSlotItemToEmptySlot(ItemStruct); // 빈 slot에 아이템 넣기
 }
 
 void APlayerCharacter::SetPlayerController(AMyPlayerController* player_Controller)
@@ -99,3 +100,18 @@ FItemStruct* APlayerCharacter::FindItemFromRow(int itemID)
 	FItemStruct* ItemStruct = itemDatabase->FindRow<FItemStruct>(*FString::FromInt(itemID), TEXT(""));
 	return ItemStruct;
 }
+
+void APlayerCharacter::RemoveFromItemInventory(FItemStruct* removeItem)
+{
+	for (auto Button : PlayerController->InventoryWidget->Buttons)
+	{
+		if(Button->GetSlotItem() == removeItem)
+		{
+			Button->RemoveSlotItem();
+			inventory.Remove(removeItem);
+			break;
+		}
+	}
+}
+
+
