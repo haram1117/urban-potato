@@ -8,7 +8,7 @@
 #include "GameFramework/Actor.h"
 #include "Item.generated.h"
 
-
+class UItemSlot;
 UCLASS()
 class URBANPOTATO_API AItem : public AActor
 {
@@ -19,6 +19,8 @@ public:
 	AItem();
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	int itemID;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UItemSlot* ItemSlot;
 	
 protected:
 	// Called when the game starts or when spawned

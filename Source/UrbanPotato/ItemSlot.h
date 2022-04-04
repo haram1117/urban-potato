@@ -3,12 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Item.h"
 #include "Components/Button.h"
 #include "ItemSlot.generated.h"
 /**
  * 
  */
+struct FItemStruct;
 UCLASS()
 class URBANPOTATO_API UItemSlot : public UButton
 {
@@ -27,5 +27,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetUsingItem();
 	void ResetSlotIcon();
+	UFUNCTION(BlueprintCallable)
 	void RemoveSlotItem();
 };
