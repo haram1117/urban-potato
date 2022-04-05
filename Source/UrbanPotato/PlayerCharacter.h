@@ -16,7 +16,7 @@ UCLASS()
 class URBANPOTATO_API APlayerCharacter : public ACharacter
 {
 	GENERATED_BODY()
-
+	DECLARE_DELEGATE_OneParam(FInputRespawnDelegate, AActor* actor);
 public:
 	// Sets default values for this character's properties
 	APlayerCharacter();
@@ -70,5 +70,7 @@ public:
 	FItemStruct* FindItemFromRow(int itemID);
 	
 	void RemoveFromItemInventory(FItemStruct* removeItem);
-	
+
+	void Respawn(AActor* actor);
+	void Respawn();
 };

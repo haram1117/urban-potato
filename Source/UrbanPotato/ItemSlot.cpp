@@ -62,5 +62,6 @@ void UItemSlot::RemoveSlotItem()
 	IsEmptySlot = true;
 	APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 	PlayerCharacter->UsingItem = nullptr;
+	this->SetToolTip(nullptr);
 	ResetSlotIcon();
 }

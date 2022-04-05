@@ -3,6 +3,7 @@
 #include "PlayerCharacter.h"
 
 #include "Item.h"
+#include "UrbanPotatoGameModeBase.h"
 #include "Components/Button.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
@@ -38,6 +39,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAction("Run", IE_Pressed, this, &APlayerCharacter::RunStart);
 	PlayerInputComponent->BindAction("Run", IE_Released, this, &APlayerCharacter::RunEnd);
 	PlayerInputComponent->BindAction("Interaction", IE_Pressed, this, &APlayerCharacter::Interact);
+	// PlayerInputComponent->BindAction("Respawn", IE_Pressed, this, &APlayerCharacter::Respawn);
 }
 
 void APlayerCharacter::MoveForward(float value)
@@ -112,6 +114,25 @@ void APlayerCharacter::RemoveFromItemInventory(FItemStruct* removeItem)
 			break;
 		}
 	}
+}
+
+void APlayerCharacter::Respawn(AActor* actor)
+{
+	AUrbanPotatoGameModeBase* GameModeBase = Cast<AUrbanPotatoGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
+	// UE_LOG(LogTemp, Log, TEXT("Respawn"));
+	// FVector respawnLocation = FVector(this->GetActorLocation().X - 10.0f, this->GetActorLocation().Y, this->GetActorLocation().Z);
+	// FTransform actortransform;
+	// actortransform.SetLocation(respawnLocation);
+	// actortransform.SetRotation(this->GetActorRotation().Quaternion());
+	// GameModeBase->RestartPlayerAtTransform(PlayerController, actortransform);
+	GameModeBase->PlayerRespawn();
+}
+
+void APlayerCharacter::Respawn()
+{
+	AUrbanPotatoGameModeBase* GameModeBase = Cast<AUrbanPotatoGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
+	GameModeBase->PlayerRespawn();
+	
 }
 
 
