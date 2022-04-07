@@ -6,6 +6,7 @@
 #include "UrbanPotatoGameModeBase.h"
 #include "Components/Button.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Tasks/GameplayTask_SpawnActor.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
@@ -39,7 +40,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAction("Run", IE_Pressed, this, &APlayerCharacter::RunStart);
 	PlayerInputComponent->BindAction("Run", IE_Released, this, &APlayerCharacter::RunEnd);
 	PlayerInputComponent->BindAction("Interaction", IE_Pressed, this, &APlayerCharacter::Interact);
-	// PlayerInputComponent->BindAction("Respawn", IE_Pressed, this, &APlayerCharacter::Respawn);
+	PlayerInputComponent->BindAction("Respawn", IE_Pressed, this, &APlayerCharacter::Respawn);
 }
 
 void APlayerCharacter::MoveForward(float value)
@@ -116,23 +117,27 @@ void APlayerCharacter::RemoveFromItemInventory(FItemStruct* removeItem)
 	}
 }
 
-void APlayerCharacter::Respawn(AActor* actor)
-{
-	AUrbanPotatoGameModeBase* GameModeBase = Cast<AUrbanPotatoGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
-	// UE_LOG(LogTemp, Log, TEXT("Respawn"));
-	// FVector respawnLocation = FVector(this->GetActorLocation().X - 10.0f, this->GetActorLocation().Y, this->GetActorLocation().Z);
-	// FTransform actortransform;
-	// actortransform.SetLocation(respawnLocation);
-	// actortransform.SetRotation(this->GetActorRotation().Quaternion());
-	// GameModeBase->RestartPlayerAtTransform(PlayerController, actortransform);
-	GameModeBase->PlayerRespawn();
-}
-
 void APlayerCharacter::Respawn()
 {
-	AUrbanPotatoGameModeBase* GameModeBase = Cast<AUrbanPotatoGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
-	GameModeBase->PlayerRespawn();
-	
+	PlayerController = Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+	FVector lastLoc = GetActorLocation();
+	lastLoc -= FVector(20, 0, -30);
+	FActorSpawnParameters SpawnParameters;
+	FRotator Rotator;
+	Destroy();
+	UBlueprintGeneratedClass* characterBPC = LoadObject<UBlueprintGeneratedClass>(NULL, TEXT("Blueprint'/Game/Base/BP/MyPlayerCharacter.MyPlayerCharacter_C'"), NULL, LOAD_None, NULL);
+	APlayerCharacter* newPlayer = Cast<APlayerCharacter>(GetWorld()->SpawnActor<AActor>(characterBPC, lastLoc, Rotator, SpawnParameters));
+	PlayerController->Possess(newPlayer);
+}
+
+void APlayerCharacter::GetInsideMap(FVector location, FRotator Rotator)
+{
+	PlayerController = Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+	FActorSpawnParameters SpawnParameters;
+	Destroy();
+	UBlueprintGeneratedClass* characterBPC = LoadObject<UBlueprintGeneratedClass>(NULL, TEXT("Blueprint'/Game/Base/BP/MyPlayerCharacter.MyPlayerCharacter_C'"), NULL, LOAD_None, NULL);
+	APlayerCharacter* newPlayer = Cast<APlayerCharacter>(GetWorld()->SpawnActor<AActor>(characterBPC, location, Rotator, SpawnParameters));
+	PlayerController->Possess(newPlayer);
 }
 
 

@@ -71,6 +71,8 @@ public:
 	
 	void RemoveFromItemInventory(FItemStruct* removeItem);
 
-	void Respawn(AActor* actor);
+	// void Respawn(AActor* actor);
 	void Respawn();
+
+	void GetInsideMap(FVector location, FRotator Rotator);
 };
