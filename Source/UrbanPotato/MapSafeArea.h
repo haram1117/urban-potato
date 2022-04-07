@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "PlayerCharacter.h"
 #include "Components/SplineComponent.h"
 #include "GameFramework/Actor.h"
 #include "MapSafeArea.generated.h"
@@ -16,6 +17,7 @@ public:
 	// Sets default values for this actor's properties
 	AMapSafeArea();
 	USplineComponent* SplineComponent;
+	APlayerCharacter* PlayerCharacter;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

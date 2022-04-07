@@ -7,6 +7,7 @@
 #include "Components/SplineComponent.h"
 #include "Components/SplineMeshComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "Tasks/GameplayTask_SpawnActor.h"
 
 // Sets default values
 AMapSafeArea::AMapSafeArea()
@@ -20,7 +21,7 @@ void AMapSafeArea::BeginPlay()
 {
 	Super::BeginPlay();
 	SplineComponent = FindComponentByClass<USplineComponent>();
-	
+	PlayerCharacter = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 }
 
 void AMapSafeArea::NotifyActorEndOverlap(AActor* OtherActor)
@@ -54,6 +55,11 @@ void AMapSafeArea::NotifyActorEndOverlap(AActor* OtherActor)
 void AMapSafeArea::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	
+	// float distance_temp = SplineComponent->GetLocationAtSplinePoint(PlayerCharacter->Splinepoint, ESplineCoordinateSpace::World) - PlayerCharacter->GetActorLocation();
+	if(GEngine)
+	{
+		// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, FString::)
+	}
 }
 

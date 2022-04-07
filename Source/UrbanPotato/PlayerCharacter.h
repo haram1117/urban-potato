@@ -32,7 +32,9 @@ public:
 	int usingItemButtonNum;
 	TArray<int> itemInventory;
 	TArray<FItemStruct*> inventory;
-
+	int Splinepoint = 0;
+	// bool SplinePlus;
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
