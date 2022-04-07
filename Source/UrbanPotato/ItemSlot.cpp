@@ -19,6 +19,7 @@ void UItemSlot::SetSlotItem(FItemStruct* _slotItem)
 {
 	slotItem = _slotItem;
 	IsEmptySlot = false;
+	_slotItem->itemClass.GetDefaultObject()->ItemSlot = this;
 	SetSlotIcon();
 }
 
@@ -59,5 +60,8 @@ void UItemSlot::RemoveSlotItem()
 {
 	slotItem = nullptr;
 	IsEmptySlot = true;
+	APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+	PlayerCharacter->UsingItem = nullptr;
+	this->SetToolTip(nullptr);
 	ResetSlotIcon();
 }

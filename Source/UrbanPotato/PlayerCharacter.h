@@ -16,7 +16,7 @@ UCLASS()
 class URBANPOTATO_API APlayerCharacter : public ACharacter
 {
 	GENERATED_BODY()
-
+	DECLARE_DELEGATE_OneParam(FInputRespawnDelegate, AActor* actor);
 public:
 	// Sets default values for this character's properties
 	APlayerCharacter();
@@ -32,7 +32,9 @@ public:
 	int usingItemButtonNum;
 	TArray<int> itemInventory;
 	TArray<FItemStruct*> inventory;
-
+	int Splinepoint = 0;
+	// bool SplinePlus;
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -70,5 +72,9 @@ public:
 	FItemStruct* FindItemFromRow(int itemID);
 	
 	void RemoveFromItemInventory(FItemStruct* removeItem);
-	
+
+	// void Respawn(AActor* actor);
+	void Respawn();
+
+	void GetInsideMap(FVector location, FRotator Rotator);
 };
