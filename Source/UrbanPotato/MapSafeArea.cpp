@@ -56,10 +56,10 @@ void AMapSafeArea::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	
-	// float distance_temp = SplineComponent->GetLocationAtSplinePoint(PlayerCharacter->Splinepoint, ESplineCoordinateSpace::World) - PlayerCharacter->GetActorLocation();
+	float distance_temp = FVector::Dist(SplineComponent->GetLocationAtSplinePoint(PlayerCharacter->Splinepoint, ESplineCoordinateSpace::World), PlayerCharacter->GetActorLocation());
 	if(GEngine)
 	{
-		// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, FString::)
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, FString::SanitizeFloat(distance_temp));
 	}
 }
 
