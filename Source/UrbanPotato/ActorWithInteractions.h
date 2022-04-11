@@ -3,27 +3,33 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Components/SplineComponent.h"
+#include "Components/WidgetComponent.h"
 #include "GameFramework/Actor.h"
-#include "MapSafeArea.generated.h"
-
+#include "ActorWithInteractions.generated.h"
 class APlayerCharacter;
 UCLASS()
-class URBANPOTATO_API AMapSafeArea : public AActor
+class URBANPOTATO_API AActorWithInteractions : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	AMapSafeArea();
-	USplineComponent* SplineComponent;
-	APlayerCharacter* PlayerCharacter;
+	AActorWithInteractions();
+	UWidgetComponent* widget;
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
 	virtual void NotifyActorEndOverlap(AActor* OtherActor) override;
+	
+	APlayerCharacter* PlayerCharacter;
+	UPROPERTY(BlueprintReadOnly)
+	bool isWidgetVisible = false;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	void SetPlayerCharacter(APlayerCharacter* _player);
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void Interaction();
+
 };

@@ -31,13 +31,12 @@ void AMapSafeArea::NotifyActorEndOverlap(AActor* OtherActor)
 	{
 		int num = SplineComponent->GetNumberOfSplinePoints();
 		UE_LOG(LogTemp, Error, TEXT("HIHIHI"));
-		FVector tempLoc = SplineComponent->GetLocationAtSplinePoint(0, ESplineCoordinateSpace::World);
 		FVector playerLoc = UGameplayStatics::GetPlayerPawn(GetWorld(), 0)->GetActorLocation();
 		FRotator playerRot = UGameplayStatics::GetPlayerPawn(GetWorld(), 0)->GetActorRotation();
 		float distance = FVector::Dist(SplineComponent->GetLocationAtSplinePoint(0, ESplineCoordinateSpace::World), playerLoc);
 		float distance1;
 		int pointIndex = 0;
-		for(int i = 0; i < num; i++)
+		for(int i = 0; i < PlayerCharacter->Splinepoint; i++)
 		{
 			distance1 = FVector::Dist(SplineComponent->GetLocationAtSplinePoint(i, ESplineCoordinateSpace::World), playerLoc);
 			if(distance > distance1)
@@ -46,9 +45,8 @@ void AMapSafeArea::NotifyActorEndOverlap(AActor* OtherActor)
 				pointIndex = i;
 			}
 		}
-		Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0))->GetInsideMap(SplineComponent->GetLocationAtSplinePoint(pointIndex, ESplineCoordinateSpace::World), playerRot);
+		Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0))->GoInsideMap(SplineComponent->GetLocationAtSplinePoint(pointIndex, ESplineCoordinateSpace::World), playerRot);
 	}
-	
 }
 
 // Called every frame
@@ -57,9 +55,19 @@ void AMapSafeArea::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	
 	float distance_temp = FVector::Dist(SplineComponent->GetLocationAtSplinePoint(PlayerCharacter->Splinepoint, ESplineCoordinateSpace::World), PlayerCharacter->GetActorLocation());
-	if(GEngine)
+	if(distance_temp <= 100.0f) //checkpoint 도달 & SplinePoint set
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, FString::SanitizeFloat(distance_temp));
+		PlayerCharacter->Splinepoint ++;
+		// UE_LOG(LogTemp, Error, TEXT("%d"), PlayerCharacter->Splinepoint);
 	}
+	// if(GEngine)
+	// {
+	// 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, FString::SanitizeFloat(distance_temp));
+	// }
+}
+
+void AMapSafeArea::SetPlayerCharacter(APlayerCharacter* _player)
+{
+	PlayerCharacter = _player;
 }
 

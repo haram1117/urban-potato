@@ -11,7 +11,8 @@
 #include "Blueprint/UserWidget.h"
 #include "PlayerCharacter.generated.h"
 
-
+class AMapSafeArea;
+class AActorWithInteractions;
 UCLASS()
 class URBANPOTATO_API APlayerCharacter : public ACharacter
 {
@@ -28,10 +29,13 @@ public:
 	/**
 	 * @brief 사용하고 있는 item
 	 */
+	UPROPERTY(BlueprintReadOnly)
 	AItem* UsingItem;
 	int usingItemButtonNum;
 	TArray<int> itemInventory;
 	TArray<FItemStruct*> inventory;
+	AActorWithInteractions* InteractActor;
+	AItem* ItemInBoundary;
 	int Splinepoint = 0;
 	// bool SplinePlus;
 	
@@ -42,7 +46,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UDataTable* itemDatabase;
 	AMyPlayerController* PlayerController; 
-	
+	AMapSafeArea* MapSafeArea;
 
 public:	
 	// Called every frame
@@ -64,6 +68,8 @@ public:
 	void RunEnd();
 
 	void Interact();
+
+	void GetItem();
 	
 	void AddtoItemInventory(int itemID);
 
@@ -76,5 +82,11 @@ public:
 	// void Respawn(AActor* actor);
 	void Respawn();
 
-	void GetInsideMap(FVector location, FRotator Rotator);
+	void GoInsideMap(FVector location, FRotator Rotator);
+
+	void SetInteractionActor(AActorWithInteractions* actor);
+	void UnSetInteractionActor();
+
+	void SetItemInBoundary(AItem* item);
+	void UnSetItemInBoundary();
 };

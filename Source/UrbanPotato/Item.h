@@ -4,6 +4,7 @@
 
 
 #include "CoreMinimal.h"
+#include "Components/WidgetComponent.h"
 #include "Engine/DataTable.h"
 #include "GameFramework/Actor.h"
 #include "Item.generated.h"
@@ -21,18 +22,21 @@ public:
 	int itemID;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UItemSlot* ItemSlot;
+	bool isWidgetVisible = false;
+	UWidgetComponent* widget;
 	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
+	virtual void NotifyActorEndOverlap(AActor* OtherActor) override;
+	
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	virtual void GetItem();
 	UFUNCTION(BlueprintImplementableEvent)
 	void Use();
-	virtual void TakeOut();
+	
 };
 
 USTRUCT(Atomic, BlueprintType)
