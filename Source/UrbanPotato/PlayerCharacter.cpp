@@ -99,7 +99,7 @@ void APlayerCharacter::GetItem() //아이템 줍기
 	if(ItemInBoundary != nullptr)
 	{
 		AddtoItemInventory(ItemInBoundary->itemID);
-		ItemInBoundary->Destroy();
+		ItemInBoundary->ActorDisable();
 	}
 }
 

@@ -36,7 +36,10 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	UFUNCTION(BlueprintImplementableEvent)
 	void Use();
-	
+	UFUNCTION(BlueprintCallable)
+	void ActorEnable();
+	UFUNCTION(BlueprintCallable)
+	void ActorDisable();
 };
 
 USTRUCT(Atomic, BlueprintType)

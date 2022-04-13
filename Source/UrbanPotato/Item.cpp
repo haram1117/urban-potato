@@ -39,6 +39,18 @@ void AItem::Tick(float DeltaTime)
 
 }
 
+void AItem::ActorEnable()
+{
+	this->SetActorHiddenInGame(false);
+	this->SetActorEnableCollision(true);
+}
+
+void AItem::ActorDisable()
+{
+	this->SetActorHiddenInGame(true);
+	this->SetActorEnableCollision(false);
+}
+
 void AItem::NotifyActorEndOverlap(AActor* OtherActor)
 {
 	Super::NotifyActorEndOverlap(OtherActor);
