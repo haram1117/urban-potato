@@ -3,11 +3,9 @@
 #include "PlayerCharacter.h"
 
 #include "Item.h"
-#include "UrbanPotatoGameModeBase.h"
-#include "Components/Button.h"
 #include "ActorWithInteractions.h"
 #include "GameFramework/CharacterMovementComponent.h"
-#include "Tasks/GameplayTask_SpawnActor.h"
+// #include "Tasks/GameplayTask_SpawnActor.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
@@ -79,13 +77,15 @@ void APlayerCharacter::RunEnd()
 
 void APlayerCharacter::Interact()
 {
-	if(UsingItem != nullptr)
-		UsingItem->Use();
+	if(InteractActor != nullptr)
+	{
+		InteractActor->Interaction();
+	}
 	else
 	{
-		if(InteractActor != nullptr)
+		if(UsingItem != nullptr)
 		{
-			InteractActor->Interaction();
+			UsingItem->Use();
 		}
 		else
 		{
@@ -94,21 +94,34 @@ void APlayerCharacter::Interact()
 	}
 }
 
-void APlayerCharacter::GetItem() //아이템 줍기
+void APlayerCharacter::GetItem_Implementation()
 {
 	if(ItemInBoundary != nullptr)
 	{
-		AddtoItemInventory(ItemInBoundary->itemID);
+		AddtoItemInventory(ItemInBoundary);
 		ItemInBoundary->ActorDisable();
 	}
 }
 
-void APlayerCharacter::AddtoItemInventory(int itemID)
+
+void APlayerCharacter::AddtoItemInventory(AItem* Item)
 {
-	// itemInventory.Add(itemID);
-	FItemStruct* ItemStruct = itemDatabase->FindRow<FItemStruct>(*FString::FromInt(itemID), TEXT(""));
-	inventory.Add(ItemStruct);
-	PlayerController->SetSlotItemToEmptySlot(ItemStruct); // 빈 slot에 아이템 넣기
+	if(FindInInventoryWithID(Item->itemID) == nullptr) // 새로운 아이템일 경우
+	{
+		FItemStruct* ItemStruct = itemDatabase->FindRow<FItemStruct>(*FString::FromInt(Item->itemID), TEXT(""));
+		ItemStruct->Item = Item;
+		// ItemStruct->Item->itemCount++;
+		ItemStruct->Item->ChangeItemCount(1);
+		inventory.Add(ItemStruct);
+		PlayerController->SetSlotItemToEmptySlot(ItemStruct); // 빈 slot에 아이템 넣기
+	}else
+	{
+		FItemStruct* ItemStruct = FindInInventoryWithID(Item->itemID);
+		ItemStruct->Item->SetNextItem(Item);
+		// ItemStruct->Item->itemCount++;
+		ItemStruct->Item->ChangeItemCount(1);
+		PlayerController->SetSlotItemToEmptySlot(ItemStruct); // 빈 slot에 아이템 넣기
+	}
 }
 
 void APlayerCharacter::SetPlayerController(AMyPlayerController* player_Controller)
@@ -126,11 +139,23 @@ void APlayerCharacter::RemoveFromItemInventory(FItemStruct* removeItem)
 {
 	for (auto Button : PlayerController->InventoryWidget->Buttons)
 	{
-		if(Button->GetSlotItem() == removeItem)
+		if(Button == removeItem->Item->ItemSlot)
 		{
-			Button->RemoveSlotItem();
-			inventory.Remove(removeItem);
-			break;
+			// removeItem->Item->ChangeItemCount(-1);
+			if(removeItem->Item->next == nullptr) // 남는 템 없음
+			{
+				Button->RemoveSlotItem();
+				inventory.Remove(removeItem);
+				break;
+			}
+			else
+			{
+				removeItem->Item->ItemSlot->SetIsUsingItemSlot(false);
+				UsingItem = nullptr;
+				removeItem->Item = removeItem->Item->next;
+				PlayerController->SetSlotItemToEmptySlot(removeItem); // Update 용
+				return;
+			}
 		}
 	}
 }
@@ -140,28 +165,16 @@ void APlayerCharacter::Respawn()
 	PlayerController = Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
 	FVector lastLoc = GetActorLocation();
 	lastLoc -= FVector(20, 0, -30);
-	FActorSpawnParameters SpawnParameters;
-	FRotator Rotator;
 	APlayerCharacter* nowPlayer = this;
 	nowPlayer->SetActorLocation(lastLoc);
-	// nowPlayer->SetActorRotation(Rotator);
-	// Destroy();
-	// UBlueprintGeneratedClass* characterBPC = LoadObject<UBlueprintGeneratedClass>(NULL, TEXT("Blueprint'/Game/Base/BP/MyPlayerCharacter.MyPlayerCharacter_C'"), NULL, LOAD_None, NULL);
-	// APlayerCharacter* newPlayer = Cast<APlayerCharacter>(GetWorld()->SpawnActor<AActor>(characterBPC, lastLoc, Rotator, SpawnParameters));
-	// PlayerController->Possess(newPlayer);
 }
 
 void APlayerCharacter::GoInsideMap(FVector location, FRotator Rotator)
 {
 	PlayerController = Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
-	FActorSpawnParameters SpawnParameters;
 	APlayerCharacter* nowPlayer = this;
 	nowPlayer->SetActorLocation(location);
 	nowPlayer->SetActorRotation(Rotator);
-	// Destroy();
-	// UBlueprintGeneratedClass* characterBPC = LoadObject<UBlueprintGeneratedClass>(NULL, TEXT("Blueprint'/Game/Base/BP/MyPlayerCharacter.MyPlayerCharacter_C'"), NULL, LOAD_None, NULL);
-	// APlayerCharacter* newPlayer = Cast<APlayerCharacter>(GetWorld()->SpawnActor<AActor>(characterBPC, location, Rotator, SpawnParameters));
-	// PlayerController->Possess(newPlayer);
 }
 
 void APlayerCharacter::SetInteractionActor(AActorWithInteractions* actor)
@@ -182,6 +195,16 @@ void APlayerCharacter::SetItemInBoundary(AItem* item)
 void APlayerCharacter::UnSetItemInBoundary()
 {
 	ItemInBoundary = nullptr;
+}
+
+FItemStruct* APlayerCharacter::FindInInventoryWithID(int id)
+{
+	for (auto ItemStruct : inventory)
+	{
+		if(ItemStruct->itemID == id)
+			return ItemStruct;
+	}
+	return nullptr;
 }
 
 

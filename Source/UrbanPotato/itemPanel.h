@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "Item.h"
 #include "Blueprint/UserWidget.h"
+#include "Components/CanvasPanel.h"
+#include "Components/TextBlock.h"
 #include "itemPanel.generated.h"
 
 /**
@@ -28,6 +30,8 @@ public:
 	UPROPERTY(meta=(BindWidget))
 	class UTextBlock* DescText;
 	UPROPERTY(meta=(BindWidget))
+	class UTextBlock* ItemCount;
+	UPROPERTY(meta=(BindWidget))
 	class UImage* Image_ItemIcon;
 private:
 	FItemStruct* ItemStruct;
@@ -36,10 +40,4 @@ private:
 inline void UitemPanel::NativeConstruct()
 {
 	Super::NativeConstruct();
-	// Update();
-}
-
-inline void UitemPanel::NativePreConstruct()
-{
-	Super::NativePreConstruct();
 }

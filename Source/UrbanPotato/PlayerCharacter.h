@@ -69,9 +69,10 @@ public:
 
 	void Interact();
 
+	UFUNCTION(BlueprintNativeEvent)
 	void GetItem();
 	
-	void AddtoItemInventory(int itemID);
+	void AddtoItemInventory(AItem* Item);
 
 	void SetPlayerController(AMyPlayerController* Controller);
 
@@ -89,4 +90,6 @@ public:
 
 	void SetItemInBoundary(AItem* item);
 	void UnSetItemInBoundary();
+
+	FItemStruct* FindInInventoryWithID(int id);
 };
