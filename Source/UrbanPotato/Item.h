@@ -10,6 +10,7 @@
 #include "Item.generated.h"
 
 class UItemSlot;
+class APlayerCharacter;
 UCLASS()
 class URBANPOTATO_API AItem : public AActor
 {
@@ -24,6 +25,13 @@ public:
 	UItemSlot* ItemSlot;
 	bool isWidgetVisible = false;
 	UWidgetComponent* widget;
+	UStaticMeshComponent* StaticMeshComponent;
+	AItem* next = nullptr;	
+	int itemCount;
+	UPROPERTY(BlueprintReadOnly)
+	FRotator InitRotator = FRotator(0, 0, 0);
+	UPROPERTY(BlueprintReadWrite)
+	FRotator LastRotator;
 	
 protected:
 	// Called when the game starts or when spawned
@@ -37,9 +45,15 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void Use();
 	UFUNCTION(BlueprintCallable)
-	void ActorEnable();
+	void ActorEnable(FVector Location, FRotator Rotator);
 	UFUNCTION(BlueprintCallable)
 	void ActorDisable();
+	void SetNextItem(AItem* NextItem);
+	void ChangeItemCount(int value);
+	void SetItemSlotToEveryItem(UItemSlot* Slot);
+	UFUNCTION(BlueprintCallable)
+	void RemoveFromInventory_Item(APlayerCharacter* PlayerCharacter);
+	AItem* GetNextItem();
 };
 
 USTRUCT(Atomic, BlueprintType)
@@ -48,6 +62,8 @@ struct FItemStruct : public FTableRowBase
 	GENERATED_BODY()
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TSubclassOf<AItem> itemClass;
+
+	AItem* Item;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	int itemID;

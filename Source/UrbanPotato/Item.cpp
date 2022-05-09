@@ -18,7 +18,9 @@ void AItem::BeginPlay()
 {
 	Super::BeginPlay();
 	widget = Cast<UWidgetComponent>(GetDefaultSubobjectByName(TEXT("Widget")));
+	StaticMeshComponent = Cast<UStaticMeshComponent>(GetDefaultSubobjectByName(TEXT("Mesh")));
 }
+
 
 void AItem::NotifyActorBeginOverlap(AActor* OtherActor)
 {
@@ -39,16 +41,70 @@ void AItem::Tick(float DeltaTime)
 
 }
 
-void AItem::ActorEnable()
+void AItem::ActorEnable(FVector Location, FRotator Rotator)
 {
+	APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+
+	this->SetActorLocationAndRotation(Location, Rotator);
+	
 	this->SetActorHiddenInGame(false);
+	StaticMeshComponent->SetEnableGravity(true);
 	this->SetActorEnableCollision(true);
+	
+	PlayerCharacter->RemoveFromItemInventory(this->ItemSlot->GetSlotItem());
 }
 
 void AItem::ActorDisable()
 {
+	LastRotator = GetActorRotation();
 	this->SetActorHiddenInGame(true);
+	StaticMeshComponent->SetEnableGravity(false);
 	this->SetActorEnableCollision(false);
+}
+
+void AItem::SetNextItem(AItem* NextItem)
+{
+	AItem* nextTemp = next;
+	if(nextTemp == nullptr)
+	{
+		next = NextItem;
+		return;
+	}
+	while(nextTemp->next != nullptr)
+	{
+		nextTemp = nextTemp->GetNextItem();
+	}
+	nextTemp->next = NextItem;
+}
+
+void AItem::ChangeItemCount(int value)
+{
+	AItem* temp = this;
+	while (temp != nullptr)
+	{
+		temp->itemCount += value;
+		temp = temp->next;
+	}
+}
+
+void AItem::SetItemSlotToEveryItem(UItemSlot* Slot)
+{
+	AItem* temp = this;
+	while (temp != nullptr)
+	{
+		temp->ItemSlot = Slot;
+		temp = temp->next;
+	}
+}
+
+void AItem::RemoveFromInventory_Item(APlayerCharacter* PlayerCharacter)
+{
+	PlayerCharacter->RemoveFromItemInventory(this->ItemSlot->GetSlotItem());
+}
+
+AItem* AItem::GetNextItem()
+{
+	return next;
 }
 
 void AItem::NotifyActorEndOverlap(AActor* OtherActor)

@@ -29,4 +29,5 @@ public:
 	void ResetSlotIcon();
 	UFUNCTION(BlueprintCallable)
 	void RemoveSlotItem();
+	void SetIsUsingItemSlot(bool value);
 };
