@@ -49,13 +49,6 @@ public:
 	
 	TSubclassOf<UitemPanel> itempanel;
 	void ButtonsInitialize();
-	// UFUNCTION(BlueprintCallable)
-	// void ShowItemDesc(int slotID);
-	//
-	// UFUNCTION(BlueprintCallable)
-	// void HideItemDesc(int slotID);
-	//
-	// void SetDescText(FString itemName, FString descText);
 
 	UFUNCTION(BlueprintCallable)
 	void SetCharacterUsingItem(int slotID);

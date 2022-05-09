@@ -19,7 +19,8 @@ void UItemSlot::SetSlotItem(FItemStruct* _slotItem)
 {
 	slotItem = _slotItem;
 	IsEmptySlot = false;
-	_slotItem->itemClass.GetDefaultObject()->ItemSlot = this;
+	slotItem->Item->SetItemSlotToEveryItem(this);
+	// _slotItem->Item->ItemSlot = this;
 	SetSlotIcon();
 }
 
@@ -43,11 +44,11 @@ void UItemSlot::SetUsingItem()
 		}
 		else
 		{
-			PlayerCharacter->UsingItem = slotItem->itemClass.GetDefaultObject(); // 사용자 선택
+			PlayerCharacter->UsingItem = slotItem->Item; // 사용자 선택
 			IsUsingItemSlot = true;
 		}
 	}
-}
+} 
 
 void UItemSlot::ResetSlotIcon()
 {
@@ -62,6 +63,12 @@ void UItemSlot::RemoveSlotItem()
 	IsEmptySlot = true;
 	APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 	PlayerCharacter->UsingItem = nullptr;
+	IsUsingItemSlot = false;
 	this->SetToolTip(nullptr);
 	ResetSlotIcon();
+}
+
+void UItemSlot::SetIsUsingItemSlot(bool value)
+{
+	IsUsingItemSlot = value;
 }
