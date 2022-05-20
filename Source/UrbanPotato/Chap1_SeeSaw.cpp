@@ -3,10 +3,8 @@
 
 #include "Chap1_SeeSaw.h"
 
-#include <string>
-
 #include "PlayerCharacter.h"
-#include "Widgets/Input/SEditableTextBox.h"
+
 // Sets default values
 AChap1_SeeSaw::AChap1_SeeSaw()
 {
@@ -23,11 +21,10 @@ void AChap1_SeeSaw::BeginPlay()
 	Body = Cast<UStaticMeshComponent>(GetDefaultSubobjectByName(TEXT("Body")));
 	WidgetComponent = Cast<UWidgetComponent>(GetDefaultSubobjectByName(TEXT("Widget")));
 	NPC_widget = Cast<UWidgetComponent>(GetDefaultSubobjectByName(TEXT("NPC_widget")));
+	NPCWidget_BP = Cast<UNPC_widget>(NPC_widget->GetWidget());
 	for(int i = 0; i < 6; i++)
 	{
-		FString diceNum = "Dicepos" + FString::FromInt(i + 1);
-		USceneComponent* DicePosition = Cast<USceneComponent>(GetDefaultSubobjectByName(FName(diceNum)));
-		DicePositions.Add(DicePosition);
+		DicesValue.Add(0);
 	}
 }
 
@@ -43,7 +40,10 @@ void AChap1_SeeSaw::NotifyActorBeginOverlap(AActor* OtherActor)
 	if(OtherActor == Cast<AActor>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0)))
 	{
 		if(!AllDiceOnSeeSaw)
+		{
 			WidgetComponent->SetVisibility(true);
+		}
+		NPC_widget->SetVisibility(true);
 	}
 }
 
@@ -53,6 +53,7 @@ void AChap1_SeeSaw::NotifyActorEndOverlap(AActor* OtherActor)
 	if(OtherActor == Cast<AActor>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0)))
 	{
 		WidgetComponent->SetVisibility(false);
+		NPC_widget->SetVisibility(false);
 	}
 }
 
@@ -66,24 +67,31 @@ bool AChap1_SeeSaw::CanInteract()
 	}
 }
 
-FVector AChap1_SeeSaw::GetRandomDicePos(int value)
-{
-	FVector dicePos = DicePositions[value]->GetComponentLocation();
-	return dicePos;
-}
-
-
 int AChap1_SeeSaw::GetDiceValue(int value)
 {
 	return DiceNum -= value;
 }
 
-void AChap1_SeeSaw::IncreaseDicePosIndex()
+void AChap1_SeeSaw::SetDiceValue(int index, int value)
 {
-	dicePosIndex++;
+	DicesValue[index] = value;
+	int total = 0;
+	for(int i = 0; i < 6; i++)
+	{
+		total += DicesValue[i];
+	}
+	TotalDiceValue = total;
+	NPCWidget_BP->Update(DiceNum - TotalDiceValue);
+	SetBodyRotation();
 }
 
-int AChap1_SeeSaw::GetDicePosIndex()
+void AChap1_SeeSaw::SetBodyRotation()
 {
-	return dicePosIndex;
+	float difference = DiceNum - TotalDiceValue;
+	FRotator Rotator;
+	Rotator.Roll = Body->GetComponentRotation().Roll;
+	Rotator.Pitch = (-1) * difference/8.0;
+	Rotator.Yaw = Body->GetComponentRotation().Yaw;
+	
+	Body->SetRelativeRotation(Rotator);
 }
