@@ -189,12 +189,39 @@ void APlayerCharacter::UnSetInteractionActor()
 
 void APlayerCharacter::SetItemInBoundary(AItem* item)
 {
-	ItemInBoundary = item;
+	if(ItemInBoundary != nullptr)
+	{
+		ItemInBoundary->next = item;	
+	}
+	else
+	{
+		ItemInBoundary = item;
+	}
 }
 
-void APlayerCharacter::UnSetItemInBoundary()
+void APlayerCharacter::UnSetItemInBoundary(AItem* item)
 {
-	ItemInBoundary = nullptr;
+	AItem* tempItem = ItemInBoundary;
+	while (tempItem->next != nullptr)
+	{
+		if(tempItem->next == item)
+		{
+			tempItem->next = item->next;
+			break;
+		}
+		else
+		{
+			tempItem = tempItem->next;	
+		}
+	}
+	if(ItemInBoundary->next != nullptr)
+	{
+		ItemInBoundary->next = nullptr;
+	}
+	else
+	{
+		ItemInBoundary = nullptr;
+	}
 }
 
 FItemStruct* APlayerCharacter::FindInInventoryWithID(int id)

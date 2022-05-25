@@ -89,7 +89,7 @@ public:
 	void UnSetInteractionActor();
 
 	void SetItemInBoundary(AItem* item);
-	void UnSetItemInBoundary();
+	void UnSetItemInBoundary(AItem* item);
 
 	FItemStruct* FindInInventoryWithID(int id);
 };
