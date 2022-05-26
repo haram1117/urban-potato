@@ -189,9 +189,14 @@ void APlayerCharacter::UnSetInteractionActor()
 
 void APlayerCharacter::SetItemInBoundary(AItem* item)
 {
+	AItem* tempItem	= ItemInBoundary;
 	if(ItemInBoundary != nullptr)
 	{
-		ItemInBoundary->next = item;	
+		while(tempItem->nextOverlap != nullptr)
+		{
+			tempItem = tempItem->nextOverlap;
+		}
+		tempItem->nextOverlap = item;	
 	}
 	else
 	{
@@ -202,26 +207,35 @@ void APlayerCharacter::SetItemInBoundary(AItem* item)
 void APlayerCharacter::UnSetItemInBoundary(AItem* item)
 {
 	AItem* tempItem = ItemInBoundary;
-	while (tempItem->next != nullptr)
+	while (tempItem->nextOverlap != nullptr)
 	{
-		if(tempItem->next == item)
+		if(tempItem == item)
 		{
-			tempItem->next = item->next;
-			break;
+			if(item->nextOverlap != nullptr)
+			{
+				// tempItem->next = item->next;
+				tempItem = item->nextOverlap;
+			}
+			item->nextOverlap = nullptr;
+			ItemInBoundary = tempItem;
+			return;
 		}
 		else
 		{
-			tempItem = tempItem->next;	
+			tempItem = tempItem->nextOverlap;
 		}
 	}
-	if(ItemInBoundary->next != nullptr)
-	{
-		ItemInBoundary->next = nullptr;
-	}
-	else
-	{
-		ItemInBoundary = nullptr;
-	}
+	item->nextOverlap = nullptr;
+	ItemInBoundary = nullptr;
+	// if(ItemInBoundary->next != nullptr) //다음 아이템이 있으면
+	// {
+	// 	ItemInBoundary = item;
+	// 	ItemInBoundary->next = nullptr;
+	// }
+	// else
+	// {
+	// 	ItemInBoundary = nullptr;
+	// }
 }
 
 FItemStruct* APlayerCharacter::FindInInventoryWithID(int id)
