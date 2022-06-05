@@ -2,7 +2,7 @@
 
 
 #include "Chap1_SeeSaw.h"
-
+#include "Math/UnrealMathUtility.h"
 #include "PlayerCharacter.h"
 
 // Sets default values
@@ -83,6 +83,10 @@ void AChap1_SeeSaw::SetDiceValue(int index, int value)
 	TotalDiceValue = total;
 	NPCWidget_BP->Update(DiceNum - TotalDiceValue);
 	SetBodyRotation();
+	if(DiceNum - TotalDiceValue == 0)
+	{
+		SeeSawClear();	
+	}
 }
 
 void AChap1_SeeSaw::SetBodyRotation()
@@ -94,4 +98,9 @@ void AChap1_SeeSaw::SetBodyRotation()
 	Rotator.Yaw = Body->GetComponentRotation().Yaw;
 	
 	Body->SetRelativeRotation(Rotator);
+}
+
+void AChap1_SeeSaw::SeeSawClear()
+{
+	UE_LOG(LogTemp, Error, TEXT("시소 클리어 "));
 }

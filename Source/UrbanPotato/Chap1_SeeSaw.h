@@ -49,4 +49,5 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetDiceValue(int index, int value);
 	void SetBodyRotation();
+	void SeeSawClear();
 };
