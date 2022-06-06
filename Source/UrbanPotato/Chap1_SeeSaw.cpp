@@ -103,4 +103,5 @@ void AChap1_SeeSaw::SetBodyRotation()
 void AChap1_SeeSaw::SeeSawClear()
 {
 	UE_LOG(LogTemp, Error, TEXT("시소 클리어 "));
+	Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0))->dialogWidget->StartDialog(FString(TEXT("주사위를 다 찾아서 맞춰주었구나! 고마워! 모두 너 덕분이야!")));
 }

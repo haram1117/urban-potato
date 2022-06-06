@@ -25,6 +25,9 @@ public:
 	TSubclassOf<UInventoryWidget> inventoryWidget;
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UitemPanel> ItemPanelWidget;
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UNPC_dialog> dialogWidget;
+	
 	// UInventoryWidget* Inventory;
 	/**
 	 * @brief 사용하고 있는 item
