@@ -27,7 +27,7 @@ public:
 	TSubclassOf<UitemPanel> ItemPanelWidget;
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UNPC_dialog> dialogWidget;
-	
+	USkeletalMeshComponent* CharacterMesh;
 	// UInventoryWidget* Inventory;
 	/**
 	 * @brief 사용하고 있는 item
@@ -40,6 +40,8 @@ public:
 	AActorWithInteractions* InteractActor;
 	AItem* ItemInBoundary;
 	AActorWithInteractions* ActorInBoundary;
+	int XAxis = 1;
+	int YAxis = 1;
 	int Splinepoint = 0;
 	// bool SplinePlus;
 	

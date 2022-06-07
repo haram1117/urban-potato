@@ -18,6 +18,7 @@ APlayerCharacter::APlayerCharacter()
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	CharacterMesh = GetMesh();
 }
 
 // Called every frame
@@ -45,12 +46,58 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 void APlayerCharacter::MoveForward(float value)
 {
-	AddMovementInput(FVector(1, 0, 0), value);	
+	AddMovementInput(FVector(1, 0, 0), value * XAxis);
+	if(CharacterMesh == nullptr)
+	{
+		return;
+	}
+	if(value > 0)
+	{
+		FRotator Rotator;
+		Rotator.Pitch = 0;
+		Rotator.Roll = 0;
+		Rotator.Yaw = -90 * XAxis;
+		CharacterMesh->SetRelativeRotation(Rotator);
+		
+	}else if(value < 0)
+	{
+		FRotator Rotator;
+		Rotator.Pitch = 0;
+		Rotator.Roll = 0;
+		Rotator.Yaw = -270 * XAxis;
+		CharacterMesh->SetRelativeRotation(Rotator);
+	}
 }
 
 void APlayerCharacter::MoveRight(float value)
 {
-	AddMovementInput(FVector(0, 1, 0), value);
+	AddMovementInput(FVector(0, 1, 0), value * YAxis);
+	if(CharacterMesh == nullptr)
+	{
+		return;
+	}
+	if(value > 0)
+	{
+		FRotator Rotator;
+		Rotator.Pitch = 0;
+		Rotator.Roll = 0;
+		if(YAxis == 1)
+			Rotator.Yaw = 0;
+		else
+			Rotator.Yaw = -180;
+		CharacterMesh->SetRelativeRotation(Rotator);
+		
+	}else if(value < 0)
+	{
+		FRotator Rotator;
+		Rotator.Pitch = 0;
+		Rotator.Roll = 0;
+		if(YAxis == 1)
+			Rotator.Yaw = -180;
+		else
+			Rotator.Yaw = 0;
+		CharacterMesh->SetRelativeRotation(Rotator);
+	}
 }
 
 void APlayerCharacter::JumpStart()

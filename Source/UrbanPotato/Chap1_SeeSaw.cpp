@@ -44,6 +44,8 @@ void AChap1_SeeSaw::NotifyActorBeginOverlap(AActor* OtherActor)
 			WidgetComponent->SetVisibility(true);
 		}
 		NPC_widget->SetVisibility(true);
+		Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0))->XAxis = -1;
+		Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0))->YAxis = -1;
 	}
 }
 
@@ -54,6 +56,8 @@ void AChap1_SeeSaw::NotifyActorEndOverlap(AActor* OtherActor)
 	{
 		WidgetComponent->SetVisibility(false);
 		NPC_widget->SetVisibility(false);
+		Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0))->XAxis = 1;
+		Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0))->YAxis = 1;
 	}
 }
 
