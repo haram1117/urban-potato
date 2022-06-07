@@ -18,4 +18,5 @@ class URBANPOTATO_API UNPC_widget : public UUserWidget
 
 public:
 	void Update(int value);
+	void ClearUpdate();
 };

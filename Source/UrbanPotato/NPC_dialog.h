@@ -23,7 +23,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void StartDialog(FString text);
 	UFUNCTION(BlueprintCallable)
-	void EndDialog();
+	void EndDialog(float delayTime);
 	UFUNCTION(BlueprintImplementableEvent)
 	void TextTyping();
 };

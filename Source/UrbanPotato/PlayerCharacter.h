@@ -39,6 +39,7 @@ public:
 	TArray<FItemStruct*> inventory;
 	AActorWithInteractions* InteractActor;
 	AItem* ItemInBoundary;
+	AActorWithInteractions* ActorInBoundary;
 	int Splinepoint = 0;
 	// bool SplinePlus;
 	
@@ -88,11 +89,12 @@ public:
 
 	void GoInsideMap(FVector location, FRotator Rotator);
 
-	void SetInteractionActor(AActorWithInteractions* actor);
-	void UnSetInteractionActor();
-
 	void SetItemInBoundary(AItem* item);
 	void UnSetItemInBoundary(AItem* item);
+
+	void SetInteractActorInBoundary(AActorWithInteractions* actor);
+	UFUNCTION(BlueprintCallable)
+	void UnSetInteractActorInBoundary(AActorWithInteractions* actor);
 
 	FItemStruct* FindInInventoryWithID(int id);
 };

@@ -7,5 +7,10 @@
 
 void UNPC_widget::Update(int value)
 {
-	TotalDiceValueText->SetText(FText::FromString(FString::FromInt(value)));
+	TotalDiceValueText->SetText(FText::FromString(FString::FromInt(value) + "/29"));
+}
+
+void UNPC_widget::ClearUpdate()
+{
+	TotalDiceValueText->SetText(FText::FromString("Clear!"));
 }

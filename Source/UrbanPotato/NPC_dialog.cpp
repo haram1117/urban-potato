@@ -14,7 +14,7 @@ void UNPC_dialog::StartDialog(FString text)
 	TextTyping();
 }
 
-void UNPC_dialog::EndDialog()
+void UNPC_dialog::EndDialog(float delayTime)
 {
 	startFlag = false;
 	dialog = "";

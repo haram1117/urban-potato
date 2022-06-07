@@ -31,6 +31,8 @@ public:
 	bool AllDiceOnSeeSaw = false;
 	UPROPERTY(BlueprintReadWrite)
 	ACameraActor* SeeSawCamera;
+	UPROPERTY(BlueprintReadOnly)
+	bool IsSeeSawFinished = false;
 	
 
 protected:
@@ -50,4 +52,6 @@ public:
 	void SetDiceValue(int index, int value);
 	void SetBodyRotation();
 	void SeeSawClear();
+	UFUNCTION(BlueprintImplementableEvent)
+	void DicesWidgetOff();
 };
