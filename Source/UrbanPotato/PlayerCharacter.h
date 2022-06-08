@@ -25,6 +25,9 @@ public:
 	TSubclassOf<UInventoryWidget> inventoryWidget;
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UitemPanel> ItemPanelWidget;
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UNPC_dialog> dialogWidget;
+	USkeletalMeshComponent* CharacterMesh;
 	// UInventoryWidget* Inventory;
 	/**
 	 * @brief 사용하고 있는 item
@@ -36,6 +39,9 @@ public:
 	TArray<FItemStruct*> inventory;
 	AActorWithInteractions* InteractActor;
 	AItem* ItemInBoundary;
+	AActorWithInteractions* ActorInBoundary;
+	int XAxis = 1;
+	int YAxis = 1;
 	int Splinepoint = 0;
 	// bool SplinePlus;
 	
@@ -85,11 +91,12 @@ public:
 
 	void GoInsideMap(FVector location, FRotator Rotator);
 
-	void SetInteractionActor(AActorWithInteractions* actor);
-	void UnSetInteractionActor();
-
 	void SetItemInBoundary(AItem* item);
-	void UnSetItemInBoundary();
+	void UnSetItemInBoundary(AItem* item);
+
+	void SetInteractActorInBoundary(AActorWithInteractions* actor);
+	UFUNCTION(BlueprintCallable)
+	void UnSetInteractActorInBoundary(AActorWithInteractions* actor);
 
 	FItemStruct* FindInInventoryWithID(int id);
 };

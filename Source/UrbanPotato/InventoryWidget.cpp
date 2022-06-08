@@ -23,21 +23,6 @@ void UInventoryWidget::ButtonsInitialize()
 	widget_itemTooltipClass = Cast<UClass>(BPCWidget_itemTooltipClass);
 }
 
-// void UInventoryWidget::ShowItemDesc(int slotID)
-// {
-// 	Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0))->ShowItemPanel(slotID);
-// }
-//
-// void UInventoryWidget::HideItemDesc(int slotID)
-// {
-// 	Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0))->HideItemPanel(slotID);
-// }
-//
-// void UInventoryWidget::SetDescText(FString itemName, FString descText)
-// {
-// 	Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0))->SetItemPanel(itemName, descText);
-// }
-
 void UInventoryWidget::SetCharacterUsingItem(int slotID)
 {
 	if(Buttons[slotID] != nullptr)
@@ -57,6 +42,7 @@ void UInventoryWidget::UpdateSlot(int slotIndex)
 		if(ItemSlot->ToolTipWidget != nullptr) //툴팁 이미 생성되어있음
 		{
 			// 툴팁 정보만 변경
+			Cast<UitemPanel>(ItemSlot->ToolTipWidget)->SetItemInfo(ItemSlot->GetSlotItem());
 		}
 		else
 		{

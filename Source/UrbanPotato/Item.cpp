@@ -115,6 +115,6 @@ void AItem::NotifyActorEndOverlap(AActor* OtherActor)
 	{
 		widget->SetVisibility(false);
 		isWidgetVisible = false;
-		PlayerCharacter->UnSetItemInBoundary();
+		PlayerCharacter->UnSetItemInBoundary(this);
 	}
 }

@@ -26,7 +26,8 @@ public:
 	bool isWidgetVisible = false;
 	UWidgetComponent* widget;
 	UStaticMeshComponent* StaticMeshComponent;
-	AItem* next = nullptr;	
+	AItem* next = nullptr;
+	AItem* nextOverlap = nullptr;
 	int itemCount;
 	UPROPERTY(BlueprintReadOnly)
 	FRotator InitRotator = FRotator(0, 0, 0);

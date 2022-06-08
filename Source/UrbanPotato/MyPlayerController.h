@@ -6,6 +6,7 @@
 #include "InventoryWidget.h"
 #include "Item.h"
 #include "itemPanel.h"
+#include "NPC_dialog.h"
 #include "GameFramework/PlayerController.h"
 #include "Blueprint/UserWidget.h"
 #include "MyPlayerController.generated.h"
@@ -23,5 +24,6 @@ public:
 	
 	UInventoryWidget* InventoryWidget;
 	UitemPanel* itemPanel;
+	UNPC_dialog* dialogWidget;
 	void SetSlotItemToEmptySlot(FItemStruct* ItemStruct);
 };
