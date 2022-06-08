@@ -13,6 +13,14 @@
 
 class AMapSafeArea;
 class AActorWithInteractions;
+UENUM(BlueprintType)
+enum class ECharacterMovementEnum : uint8
+{
+	E_Idle,
+	E_Walk,
+	E_Jump,
+	E_Run
+};
 UCLASS()
 class URBANPOTATO_API APlayerCharacter : public ACharacter
 {
@@ -43,7 +51,8 @@ public:
 	int XAxis = 1;
 	int YAxis = 1;
 	int Splinepoint = 0;
-	// bool SplinePlus;
+	UPROPERTY(BlueprintReadWrite)
+	ECharacterMovementEnum CharacterMovementEnum = ECharacterMovementEnum::E_Idle;
 	
 protected:
 	// Called when the game starts or when spawned

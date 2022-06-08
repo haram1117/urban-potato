@@ -8,6 +8,7 @@
 #include "GameFramework/Actor.h"
 #include "Chap1_SeeSaw.generated.h"
 
+class AItem;
 UCLASS()
 class URBANPOTATO_API AChap1_SeeSaw : public AActor
 {
@@ -31,8 +32,10 @@ public:
 	bool AllDiceOnSeeSaw = false;
 	UPROPERTY(BlueprintReadWrite)
 	ACameraActor* SeeSawCamera;
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadWrite)
 	bool IsSeeSawFinished = false;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	AItem* FerrisWheelKey;
 	
 
 protected:

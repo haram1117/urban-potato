@@ -34,5 +34,9 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void Interaction();
+	UFUNCTION(BlueprintImplementableEvent)
+	void GaugeWidgetOff();
+	UFUNCTION(BlueprintCallable)
+	void WidgetOff();
 
 };

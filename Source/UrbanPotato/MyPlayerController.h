@@ -24,6 +24,7 @@ public:
 	
 	UInventoryWidget* InventoryWidget;
 	UitemPanel* itemPanel;
+	UPROPERTY(BlueprintReadOnly)
 	UNPC_dialog* dialogWidget;
 	void SetSlotItemToEmptySlot(FItemStruct* ItemStruct);
 };

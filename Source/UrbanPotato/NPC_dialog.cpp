@@ -10,7 +10,6 @@ void UNPC_dialog::StartDialog(FString text)
 	DialogText->Text = FText::FromString("");
 	startFlag = true;
 	dialog = text;
-	UE_LOG(LogTemp, Error, TEXT("%s"), *text);
 	TextTyping();
 }
 

@@ -47,6 +47,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 void APlayerCharacter::MoveForward(float value)
 {
 	AddMovementInput(FVector(1, 0, 0), value * XAxis);
+	CharacterMovementEnum = ECharacterMovementEnum::E_Walk;
 	if(CharacterMesh == nullptr)
 	{
 		return;
@@ -58,6 +59,7 @@ void APlayerCharacter::MoveForward(float value)
 		Rotator.Roll = 0;
 		Rotator.Yaw = -90 * XAxis;
 		CharacterMesh->SetRelativeRotation(Rotator);
+		CharacterMovementEnum = ECharacterMovementEnum::E_Walk;
 		
 	}else if(value < 0)
 	{
@@ -66,6 +68,11 @@ void APlayerCharacter::MoveForward(float value)
 		Rotator.Roll = 0;
 		Rotator.Yaw = -270 * XAxis;
 		CharacterMesh->SetRelativeRotation(Rotator);
+		CharacterMovementEnum = ECharacterMovementEnum::E_Walk;
+	}
+	else
+	{
+		CharacterMovementEnum = ECharacterMovementEnum::E_Idle; 
 	}
 }
 
@@ -86,7 +93,7 @@ void APlayerCharacter::MoveRight(float value)
 		else
 			Rotator.Yaw = -180;
 		CharacterMesh->SetRelativeRotation(Rotator);
-		
+		CharacterMovementEnum = ECharacterMovementEnum::E_Walk;
 	}else if(value < 0)
 	{
 		FRotator Rotator;
@@ -97,29 +104,34 @@ void APlayerCharacter::MoveRight(float value)
 		else
 			Rotator.Yaw = 0;
 		CharacterMesh->SetRelativeRotation(Rotator);
+		CharacterMovementEnum = ECharacterMovementEnum::E_Walk;
 	}
 }
 
 void APlayerCharacter::JumpStart()
 {
 	bPressedJump = true;
+	CharacterMovementEnum = ECharacterMovementEnum::E_Jump;
 }
 
 void APlayerCharacter::JumpEnd()
 {
 	bPressedJump = false;
+	CharacterMovementEnum = ECharacterMovementEnum::E_Idle;
 }
 
 void APlayerCharacter::RunStart()
 {
 	bPressedRun = true;
 	GetCharacterMovement()->MaxWalkSpeed = 2000;
+	CharacterMovementEnum = ECharacterMovementEnum::E_Run;
 }
 
 void APlayerCharacter::RunEnd()
 {
 	bPressedRun = false;
 	GetCharacterMovement()->MaxWalkSpeed = 600;
+	CharacterMovementEnum = ECharacterMovementEnum::E_Walk;
 }
 
 void APlayerCharacter::Interact()
@@ -228,9 +240,18 @@ void APlayerCharacter::SetItemInBoundary(AItem* item)
 	AItem* tempItem	= ItemInBoundary;
 	if(ItemInBoundary != nullptr)
 	{
+		int loopCount = 0;
 		while(tempItem->nextOverlap != nullptr)
 		{
 			tempItem = tempItem->nextOverlap;
+			if(tempItem == nullptr)
+				return;
+			loopCount++;
+			if(loopCount >= 100)
+			{
+				UE_LOG(LogTemp, Error, TEXT("Over1"));
+				return;
+			}
 		}
 		tempItem->nextOverlap = item;	
 	}
@@ -245,6 +266,7 @@ void APlayerCharacter::UnSetItemInBoundary(AItem* item)
 	AItem* tempItem = ItemInBoundary;
 	if(tempItem == nullptr)
 		return;
+	int loopCount = 0;
 	while (tempItem->nextOverlap != nullptr)
 	{
 		if(tempItem == item)
@@ -261,6 +283,14 @@ void APlayerCharacter::UnSetItemInBoundary(AItem* item)
 		else
 		{
 			tempItem = tempItem->nextOverlap;
+			if(tempItem == nullptr)
+				return;
+		}
+		loopCount++;
+		if(loopCount >= 100)
+		{
+			UE_LOG(LogTemp, Error, TEXT("Over2"));
+			return;
 		}
 	}
 	item->nextOverlap = nullptr;
@@ -272,11 +302,21 @@ void APlayerCharacter::SetInteractActorInBoundary(AActorWithInteractions* actor)
 	AActorWithInteractions* tempActor = ActorInBoundary;
 	if(ActorInBoundary != nullptr)
 	{
+		int loopCount = 0;
 		while(tempActor->nextOverlap != nullptr)
 		{
 			tempActor = tempActor->nextOverlap;
+			if(tempActor == nullptr)
+				break;
 		}
-		tempActor->nextOverlap = actor;	
+		tempActor->nextOverlap = actor;
+		
+		loopCount++;
+		if(loopCount >= 100)
+		{
+			UE_LOG(LogTemp, Error, TEXT("Over3"));
+			return;
+		}
 	}
 	else
 	{
@@ -289,6 +329,7 @@ void APlayerCharacter::UnSetInteractActorInBoundary(AActorWithInteractions* acto
 	AActorWithInteractions* tempActor = ActorInBoundary;
 	if(tempActor == nullptr)
 		return;
+	int loopCount = 0;
 	while (tempActor->nextOverlap != nullptr)
 	{
 		if(tempActor == actor)
@@ -305,6 +346,14 @@ void APlayerCharacter::UnSetInteractActorInBoundary(AActorWithInteractions* acto
 		else
 		{
 			tempActor = tempActor->nextOverlap;
+			if(tempActor == nullptr)
+				break;
+		}
+		loopCount++;
+		if(loopCount >= 100)
+		{
+			UE_LOG(LogTemp, Error, TEXT("Over4"));
+			return;
 		}
 	}
 	actor->nextOverlap = nullptr;

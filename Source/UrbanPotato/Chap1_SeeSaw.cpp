@@ -26,6 +26,11 @@ void AChap1_SeeSaw::BeginPlay()
 	{
 		DicesValue.Add(0);
 	}
+	UBlueprintGeneratedClass* key_BP =
+		LoadObject<UBlueprintGeneratedClass>(NULL,
+			TEXT("Blueprint'/Game/Base/BP/Item_key.Item_key_C'"), NULL, LOAD_None, NULL);
+	UClass* key_class = Cast<UClass>(key_BP);
+	FerrisWheelKey = Cast<AItem>(UGameplayStatics::GetActorOfClass(GetWorld(), key_class));
 }
 
 // Called every frame
@@ -111,4 +116,8 @@ void AChap1_SeeSaw::SeeSawClear()
 	IsSeeSawFinished = true;
 	DicesWidgetOff();
 	NPCWidget_BP->ClearUpdate();
+	// Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0))->AddtoItemInventory(FerrisWheelKey);
+	FerrisWheelKey->SetActorHiddenInGame(false);
+	FerrisWheelKey->SetActorEnableCollision(true);
+	FerrisWheelKey->StaticMeshComponent->SetEnableGravity(true);
 }

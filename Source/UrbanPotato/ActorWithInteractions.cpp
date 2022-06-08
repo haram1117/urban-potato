@@ -44,6 +44,7 @@ void AActorWithInteractions::NotifyActorEndOverlap(AActor* OtherActor)
 		widget->SetVisibility(false);
 		isWidgetVisible = false;
 		PlayerCharacter->UnSetInteractActorInBoundary(this);
+		GaugeWidgetOff();
 	}
 }
 
@@ -52,5 +53,10 @@ void AActorWithInteractions::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void AActorWithInteractions::WidgetOff()
+{
+	widget->SetVisibility(false);
 }
 
