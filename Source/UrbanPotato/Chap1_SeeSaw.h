@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "NPC_widget.h"
 #include "Components/WidgetComponent.h"
 #include "GameFramework/Actor.h"
 #include "Chap1_SeeSaw.generated.h"
@@ -19,12 +20,20 @@ public:
 	UStaticMeshComponent* Body;
 	UWidgetComponent* WidgetComponent;
 	UWidgetComponent* NPC_widget;
+	UNPC_widget* NPCWidget_BP;
 	UPROPERTY(BlueprintReadWrite)
 	int DiceNum = 29;
-	TArray<USceneComponent*> DicePositions;
 	int dicePosIndex = 0;
+	int TotalDiceValue = 0;
+	UPROPERTY(BlueprintReadWrite)
+	TArray<int> DicesValue;
 	UPROPERTY(BlueprintReadWrite)
 	bool AllDiceOnSeeSaw = false;
+	UPROPERTY(BlueprintReadWrite)
+	ACameraActor* SeeSawCamera;
+	UPROPERTY(BlueprintReadOnly)
+	bool IsSeeSawFinished = false;
+	
 
 protected:
 	// Called when the game starts or when spawned
@@ -38,12 +47,11 @@ public:
 	UFUNCTION(BlueprintCallable)
 	bool CanInteract();
 	UFUNCTION(BlueprintCallable)
-	FVector GetRandomDicePos(int value);
-	UFUNCTION(BlueprintCallable)
 	int GetDiceValue(int value);
 	UFUNCTION(BlueprintCallable)
-	void IncreaseDicePosIndex();
-	UFUNCTION(BlueprintCallable)
-	int GetDicePosIndex();
-
+	void SetDiceValue(int index, int value);
+	void SetBodyRotation();
+	void SeeSawClear();
+	UFUNCTION(BlueprintImplementableEvent)
+	void DicesWidgetOff();
 };

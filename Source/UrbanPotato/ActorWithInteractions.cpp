@@ -25,9 +25,11 @@ void AActorWithInteractions::NotifyActorBeginOverlap(AActor* OtherActor)
 	Super::NotifyActorBeginOverlap(OtherActor);
 	if(OtherActor == Cast<AActor>(PlayerCharacter) && !isWidgetVisible)
 	{
+		if(WidgetOffFlag)
+			return;
 		widget->SetVisibility(true);
 		isWidgetVisible = true;
-		PlayerCharacter->SetInteractionActor(this);
+		PlayerCharacter->SetInteractActorInBoundary(this);
 	}
 }
 
@@ -37,9 +39,11 @@ void AActorWithInteractions::NotifyActorEndOverlap(AActor* OtherActor)
 	
 	if(OtherActor == Cast<AActor>(PlayerCharacter) && isWidgetVisible)
 	{
+		if(WidgetOffFlag)
+			return;
 		widget->SetVisibility(false);
 		isWidgetVisible = false;
-		PlayerCharacter->UnSetInteractionActor();
+		PlayerCharacter->UnSetInteractActorInBoundary(this);
 	}
 }
 

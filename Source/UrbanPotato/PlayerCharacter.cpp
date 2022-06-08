@@ -18,6 +18,7 @@ APlayerCharacter::APlayerCharacter()
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	CharacterMesh = GetMesh();
 }
 
 // Called every frame
@@ -45,12 +46,58 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 void APlayerCharacter::MoveForward(float value)
 {
-	AddMovementInput(FVector(1, 0, 0), value);	
+	AddMovementInput(FVector(1, 0, 0), value * XAxis);
+	if(CharacterMesh == nullptr)
+	{
+		return;
+	}
+	if(value > 0)
+	{
+		FRotator Rotator;
+		Rotator.Pitch = 0;
+		Rotator.Roll = 0;
+		Rotator.Yaw = -90 * XAxis;
+		CharacterMesh->SetRelativeRotation(Rotator);
+		
+	}else if(value < 0)
+	{
+		FRotator Rotator;
+		Rotator.Pitch = 0;
+		Rotator.Roll = 0;
+		Rotator.Yaw = -270 * XAxis;
+		CharacterMesh->SetRelativeRotation(Rotator);
+	}
 }
 
 void APlayerCharacter::MoveRight(float value)
 {
-	AddMovementInput(FVector(0, 1, 0), value);
+	AddMovementInput(FVector(0, 1, 0), value * YAxis);
+	if(CharacterMesh == nullptr)
+	{
+		return;
+	}
+	if(value > 0)
+	{
+		FRotator Rotator;
+		Rotator.Pitch = 0;
+		Rotator.Roll = 0;
+		if(YAxis == 1)
+			Rotator.Yaw = 0;
+		else
+			Rotator.Yaw = -180;
+		CharacterMesh->SetRelativeRotation(Rotator);
+		
+	}else if(value < 0)
+	{
+		FRotator Rotator;
+		Rotator.Pitch = 0;
+		Rotator.Roll = 0;
+		if(YAxis == 1)
+			Rotator.Yaw = -180;
+		else
+			Rotator.Yaw = 0;
+		CharacterMesh->SetRelativeRotation(Rotator);
+	}
 }
 
 void APlayerCharacter::JumpStart()
@@ -77,9 +124,9 @@ void APlayerCharacter::RunEnd()
 
 void APlayerCharacter::Interact()
 {
-	if(InteractActor != nullptr)
+	if(ActorInBoundary != nullptr)
 	{
-		InteractActor->Interaction();
+		ActorInBoundary->Interaction();
 	}
 	else
 	{
@@ -176,22 +223,16 @@ void APlayerCharacter::GoInsideMap(FVector location, FRotator Rotator)
 	nowPlayer->SetActorLocation(location);
 	nowPlayer->SetActorRotation(Rotator);
 }
-
-void APlayerCharacter::SetInteractionActor(AActorWithInteractions* actor)
-{
-	InteractActor = actor;
-}
-
-void APlayerCharacter::UnSetInteractionActor()
-{
-	InteractActor = nullptr;
-}
-
 void APlayerCharacter::SetItemInBoundary(AItem* item)
 {
+	AItem* tempItem	= ItemInBoundary;
 	if(ItemInBoundary != nullptr)
 	{
-		ItemInBoundary->next = item;	
+		while(tempItem->nextOverlap != nullptr)
+		{
+			tempItem = tempItem->nextOverlap;
+		}
+		tempItem->nextOverlap = item;	
 	}
 	else
 	{
@@ -202,26 +243,72 @@ void APlayerCharacter::SetItemInBoundary(AItem* item)
 void APlayerCharacter::UnSetItemInBoundary(AItem* item)
 {
 	AItem* tempItem = ItemInBoundary;
-	while (tempItem->next != nullptr)
+	if(tempItem == nullptr)
+		return;
+	while (tempItem->nextOverlap != nullptr)
 	{
-		if(tempItem->next == item)
+		if(tempItem == item)
 		{
-			tempItem->next = item->next;
-			break;
+			if(item->nextOverlap != nullptr)
+			{
+				// tempItem->next = item->next;
+				tempItem = item->nextOverlap;
+			}
+			item->nextOverlap = nullptr;
+			ItemInBoundary = tempItem;
+			return;
 		}
 		else
 		{
-			tempItem = tempItem->next;	
+			tempItem = tempItem->nextOverlap;
 		}
 	}
-	if(ItemInBoundary->next != nullptr)
+	item->nextOverlap = nullptr;
+	ItemInBoundary = nullptr;
+}
+
+void APlayerCharacter::SetInteractActorInBoundary(AActorWithInteractions* actor)
+{
+	AActorWithInteractions* tempActor = ActorInBoundary;
+	if(ActorInBoundary != nullptr)
 	{
-		ItemInBoundary->next = nullptr;
+		while(tempActor->nextOverlap != nullptr)
+		{
+			tempActor = tempActor->nextOverlap;
+		}
+		tempActor->nextOverlap = actor;	
 	}
 	else
 	{
-		ItemInBoundary = nullptr;
+		ActorInBoundary = actor;
 	}
+}
+
+void APlayerCharacter::UnSetInteractActorInBoundary(AActorWithInteractions* actor)
+{
+	AActorWithInteractions* tempActor = ActorInBoundary;
+	if(tempActor == nullptr)
+		return;
+	while (tempActor->nextOverlap != nullptr)
+	{
+		if(tempActor == actor)
+		{
+			if(actor->nextOverlap != nullptr)
+			{
+				// tempActor->next = actor->next;
+				tempActor = actor->nextOverlap;
+			}
+			actor->nextOverlap = nullptr;
+			ActorInBoundary = tempActor;
+			return;
+		}
+		else
+		{
+			tempActor = tempActor->nextOverlap;
+		}
+	}
+	actor->nextOverlap = nullptr;
+	ActorInBoundary = nullptr;
 }
 
 FItemStruct* APlayerCharacter::FindInInventoryWithID(int id)
