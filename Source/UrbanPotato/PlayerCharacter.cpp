@@ -31,6 +31,19 @@ void APlayerCharacter::Tick(float DeltaTime)
 	{
 		CharacterMovementEnum = ECharacterMovementEnum::E_Idle;
 	}
+	else if(bPressedJump)
+	{
+		CharacterMovementEnum = ECharacterMovementEnum::E_Jump;
+	}
+	else if(bPressedRun)
+	{
+		CharacterMovementEnum = ECharacterMovementEnum::E_Run;
+	}
+	else
+	{
+		CharacterMovementEnum = ECharacterMovementEnum::E_Walk;
+		UGameplayStatics::PlaySoundAtLocation(this, walkSound, GetActorLocation(), GetActorRotation());
+	}
 }
 
 // Called to bind functionality to input
@@ -309,10 +322,10 @@ void APlayerCharacter::SetItemInBoundary(AItem* item)
 			if(loopCount >= 100)
 			{
 				UE_LOG(LogTemp, Error, TEXT("Over1"));
-				break;
+				return;
 			}
 		}
-		tempItem->nextOverlap = item;	
+		tempItem->nextOverlap = item;
 	}
 	else
 	{
@@ -343,7 +356,7 @@ void APlayerCharacter::UnSetItemInBoundary(AItem* item)
 		{
 			tempItem = tempItem->nextOverlap;
 			if(tempItem == nullptr)
-				break;
+				return;
 		}
 		loopCount++;
 		if(loopCount >= 100)
@@ -371,7 +384,7 @@ void APlayerCharacter::SetInteractActorInBoundary(AActorWithInteractions* actor)
 			if(loopCount >= 100)
 			{
 				UE_LOG(LogTemp, Error, TEXT("Over3"));
-				break;
+				return;
 			}
 		}
 		tempActor->nextOverlap = actor;
@@ -412,7 +425,7 @@ void APlayerCharacter::UnSetInteractActorInBoundary(AActorWithInteractions* acto
 		if(loopCount >= 100)
 		{
 			UE_LOG(LogTemp, Error, TEXT("Over4"));
-			break;
+			return;
 		}
 	}
 	actor->nextOverlap = nullptr;

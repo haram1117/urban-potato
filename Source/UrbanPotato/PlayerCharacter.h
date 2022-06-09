@@ -36,6 +36,8 @@ public:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UNPC_dialog> dialogWidget;
 	USkeletalMeshComponent* CharacterMesh;
+	UPROPERTY(EditAnywhere)
+	USoundBase* walkSound;
 	// UInventoryWidget* Inventory;
 	/**
 	 * @brief 사용하고 있는 item
@@ -55,6 +57,8 @@ public:
 	ECharacterMovementEnum CharacterMovementEnum = ECharacterMovementEnum::E_Idle;
 	bool forward_Moving = false;
 	bool right_Moving = false;
+
+
 	
 protected:
 	// Called when the game starts or when spawned
