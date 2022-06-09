@@ -40,12 +40,33 @@ public:
 	UPROPERTY(meta=(BindWidget))
 	class UItemSlot* SlotButton9;
 
+	UPROPERTY(meta=(BindWidget))
+	class UTextBlock* text0;
+	UPROPERTY(meta=(BindWidget))
+	class UTextBlock* text1;
+	UPROPERTY(meta=(BindWidget))
+	class UTextBlock* text2;
+	UPROPERTY(meta=(BindWidget))
+	class UTextBlock* text3;
+	UPROPERTY(meta=(BindWidget))
+	class UTextBlock* text4;
+	UPROPERTY(meta=(BindWidget))
+	class UTextBlock* text5;
+	UPROPERTY(meta=(BindWidget))
+	class UTextBlock* text6;
+	UPROPERTY(meta=(BindWidget))
+	class UTextBlock* text7;
+	UPROPERTY(meta=(BindWidget))
+	class UTextBlock* text8;
+	UPROPERTY(meta=(BindWidget))
+	class UTextBlock* text9;
 	
 	UPROPERTY(EditAnywhere)
 	TArray<UItemSlot*> Buttons;
-
+	TArray<UTextBlock*> TextBlocks;
 	UClass* widget_itemTooltipClass;
-
+	FSlateColor InitColor;
+	FSlateColor UsingColor;
 	
 	TSubclassOf<UitemPanel> itempanel;
 	void ButtonsInitialize();
@@ -54,5 +75,6 @@ public:
 	void SetCharacterUsingItem(int slotID);
 
 	void UpdateSlot(int slotIndex);
+	void ReSetTextBlockColor();
 
 };

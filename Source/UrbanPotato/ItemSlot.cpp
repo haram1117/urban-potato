@@ -32,7 +32,7 @@ void UItemSlot::SetSlotIcon()
 }
 
 
-void UItemSlot::SetUsingItem()
+void UItemSlot::SetUsingItem(int id)
 {
 	if(!IsEmptySlot)
 	{
@@ -40,11 +40,13 @@ void UItemSlot::SetUsingItem()
 		if(IsUsingItemSlot)
 		{
 			PlayerCharacter->UsingItem = nullptr;
+			Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0))->InventoryWidget->ReSetTextBlockColor();
 			IsUsingItemSlot = false;
 		}
 		else
 		{
 			PlayerCharacter->UsingItem = slotItem->Item; // 사용자 선택
+			Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0))->InventoryWidget->TextBlocks[id]->SetColorAndOpacity(FSlateColor(FColor::Red));
 			IsUsingItemSlot = true;
 		}
 	}

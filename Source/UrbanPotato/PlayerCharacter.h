@@ -90,6 +90,9 @@ public:
 	void ShowInventory();
 	void HideInventory();
 
+	template<int32 slotNum>
+	void SetInventory_UsingItem();
+
 	UFUNCTION(BlueprintImplementableEvent)
 	void SetInputMode();
 	UFUNCTION(BlueprintImplementableEvent)
@@ -121,3 +124,12 @@ public:
 
 	FItemStruct* FindInInventoryWithID(int id);
 };
+
+template <int32 slotNum>
+void APlayerCharacter::SetInventory_UsingItem()
+{
+	if(slotNum == 0)
+		PlayerController->InventoryWidget->SetCharacterUsingItem(9);
+	else
+		PlayerController->InventoryWidget->SetCharacterUsingItem(slotNum - 1);
+}

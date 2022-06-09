@@ -25,7 +25,7 @@ public:
 	void SetSlotItem(FItemStruct* _slotItem);
 	void SetSlotIcon();
 	UFUNCTION(BlueprintCallable)
-	void SetUsingItem();
+	void SetUsingItem(int id);
 	void ResetSlotIcon();
 	UFUNCTION(BlueprintCallable)
 	void RemoveSlotItem();

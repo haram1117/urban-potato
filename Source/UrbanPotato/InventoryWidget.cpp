@@ -19,6 +19,18 @@ void UInventoryWidget::ButtonsInitialize()
 	Buttons.Add(SlotButton7);
 	Buttons.Add(SlotButton8);
 	Buttons.Add(SlotButton9);
+
+	TextBlocks.Add(text0);
+	TextBlocks.Add(text1);
+	TextBlocks.Add(text2);
+	TextBlocks.Add(text3);
+	TextBlocks.Add(text4);
+	TextBlocks.Add(text5);
+	TextBlocks.Add(text6);
+	TextBlocks.Add(text7);
+	TextBlocks.Add(text8);
+	TextBlocks.Add(text9);
+	InitColor = text0->ColorAndOpacity;
 	UBlueprintGeneratedClass* BPCWidget_itemTooltipClass = LoadObject<UBlueprintGeneratedClass>(NULL, TEXT("WidgetBlueprint'/Game/Base/Widgets/BP_ItemPanel.BP_ItemPanel_C'"), NULL, LOAD_None, NULL);
 	widget_itemTooltipClass = Cast<UClass>(BPCWidget_itemTooltipClass);
 }
@@ -26,7 +38,10 @@ void UInventoryWidget::ButtonsInitialize()
 void UInventoryWidget::SetCharacterUsingItem(int slotID)
 {
 	if(Buttons[slotID] != nullptr)
-		Buttons[slotID]->SetUsingItem();
+	{
+		ReSetTextBlockColor();
+		Buttons[slotID]->SetUsingItem(slotID);
+	}
 }
 
 void UInventoryWidget::UpdateSlot(int slotIndex)
@@ -54,4 +69,10 @@ void UInventoryWidget::UpdateSlot(int slotIndex)
 	}
 }
 
-
+void UInventoryWidget::ReSetTextBlockColor()
+{
+	for (auto Text : TextBlocks)
+	{
+		Text->SetColorAndOpacity(InitColor);
+	}
+}

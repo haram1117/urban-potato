@@ -2,6 +2,7 @@
 
 #include "PlayerCharacter.h"
 
+#include "ActorWithInteractions.h"
 #include "Item.h"
 #include "ActorWithInteractions.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -26,8 +27,10 @@ void APlayerCharacter::BeginPlay()
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	if(!forward_Moving || !right_Moving)
+	if(!forward_Moving && !right_Moving)
+	{
 		CharacterMovementEnum = ECharacterMovementEnum::E_Idle;
+	}
 }
 
 // Called to bind functionality to input
@@ -39,6 +42,16 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAxis("MoveRight", this, &APlayerCharacter::MoveRight);
 	PlayerInputComponent->BindAxis("Turn", this, &APlayerCharacter::Turn);
 	PlayerInputComponent->BindAxis("LookUp", this, &APlayerCharacter::LookUp);
+	PlayerInputComponent->BindAction("1", IE_Pressed, this, &APlayerCharacter::SetInventory_UsingItem<1>);
+	PlayerInputComponent->BindAction("2", IE_Pressed, this, &APlayerCharacter::SetInventory_UsingItem<2>);
+	PlayerInputComponent->BindAction("3", IE_Pressed, this, &APlayerCharacter::SetInventory_UsingItem<3>);
+	PlayerInputComponent->BindAction("4", IE_Pressed, this, &APlayerCharacter::SetInventory_UsingItem<4>);
+	PlayerInputComponent->BindAction("5", IE_Pressed, this, &APlayerCharacter::SetInventory_UsingItem<5>);
+	PlayerInputComponent->BindAction("6", IE_Pressed, this, &APlayerCharacter::SetInventory_UsingItem<6>);
+	PlayerInputComponent->BindAction("7", IE_Pressed, this, &APlayerCharacter::SetInventory_UsingItem<7>);
+	PlayerInputComponent->BindAction("8", IE_Pressed, this, &APlayerCharacter::SetInventory_UsingItem<8>);
+	PlayerInputComponent->BindAction("9", IE_Pressed, this, &APlayerCharacter::SetInventory_UsingItem<9>);
+	PlayerInputComponent->BindAction("0", IE_Pressed, this, &APlayerCharacter::SetInventory_UsingItem<0>);
 	PlayerInputComponent->BindAction("Inventory", IE_Pressed, this, &APlayerCharacter::ShowInventory);
 	PlayerInputComponent->BindAction("Inventory", IE_Released, this, &APlayerCharacter::HideInventory);
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &APlayerCharacter::JumpStart);
@@ -53,7 +66,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 void APlayerCharacter::MoveForward(float value)
 {
 	AddMovementInput(UKismetMathLibrary::GetForwardVector(GetControlRotation()), value);
-	CharacterMovementEnum = ECharacterMovementEnum::E_Walk;
+	
 	// if(CharacterMesh == nullptr)
 	// {
 	// 	return;
@@ -83,7 +96,10 @@ void APlayerCharacter::MoveForward(float value)
 	if(value == 0)
 		forward_Moving = false;
 	else
+	{
+		CharacterMovementEnum = ECharacterMovementEnum::E_Walk;
 		forward_Moving = true;
+	}
 }
 
 void APlayerCharacter::MoveRight(float value)
@@ -103,7 +119,6 @@ void APlayerCharacter::MoveRight(float value)
 	// 	else
 	// 		Rotator.Yaw = -180;
 	// 	CharacterMesh->SetRelativeRotation(Rotator);
-	CharacterMovementEnum = ECharacterMovementEnum::E_Walk;
 	// }else if(value < 0)
 	// {
 	// 	FRotator Rotator;
@@ -119,7 +134,10 @@ void APlayerCharacter::MoveRight(float value)
 	if(value == 0)
 		right_Moving = false;
 	else
+	{
+		CharacterMovementEnum = ECharacterMovementEnum::E_Walk;
 		right_Moving = true;
+	}
 }
 
 void APlayerCharacter::JumpStart()
@@ -172,6 +190,7 @@ void APlayerCharacter::HideInventory()
 	
 	UnSetInputMode();
 }
+
 
 void APlayerCharacter::Interact()
 {
@@ -235,6 +254,7 @@ FItemStruct* APlayerCharacter::FindItemFromRow(int itemID)
 
 void APlayerCharacter::RemoveFromItemInventory(FItemStruct* removeItem)
 {
+	PlayerController->InventoryWidget->ReSetTextBlockColor();
 	for (auto Button : PlayerController->InventoryWidget->Buttons)
 	{
 		if(Button == removeItem->Item->ItemSlot)
