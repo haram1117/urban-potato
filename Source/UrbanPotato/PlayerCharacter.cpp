@@ -26,7 +26,8 @@ void APlayerCharacter::BeginPlay()
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	if(!forward_Moving || !right_Moving)
+		CharacterMovementEnum = ECharacterMovementEnum::E_Idle;
 }
 
 // Called to bind functionality to input
@@ -79,6 +80,10 @@ void APlayerCharacter::MoveForward(float value)
 	// {
 	// 	CharacterMovementEnum = ECharacterMovementEnum::E_Idle; 
 	// }
+	if(value == 0)
+		forward_Moving = false;
+	else
+		forward_Moving = true;
 }
 
 void APlayerCharacter::MoveRight(float value)
@@ -98,7 +103,7 @@ void APlayerCharacter::MoveRight(float value)
 	// 	else
 	// 		Rotator.Yaw = -180;
 	// 	CharacterMesh->SetRelativeRotation(Rotator);
-		CharacterMovementEnum = ECharacterMovementEnum::E_Walk;
+	CharacterMovementEnum = ECharacterMovementEnum::E_Walk;
 	// }else if(value < 0)
 	// {
 	// 	FRotator Rotator;
@@ -111,6 +116,10 @@ void APlayerCharacter::MoveRight(float value)
 	// 	CharacterMesh->SetRelativeRotation(Rotator);
 	// 	CharacterMovementEnum = ECharacterMovementEnum::E_Walk;
 	// }
+	if(value == 0)
+		right_Moving = false;
+	else
+		right_Moving = true;
 }
 
 void APlayerCharacter::JumpStart()

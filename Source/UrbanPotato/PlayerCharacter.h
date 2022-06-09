@@ -53,6 +53,8 @@ public:
 	int Splinepoint = 0;
 	UPROPERTY(BlueprintReadWrite)
 	ECharacterMovementEnum CharacterMovementEnum = ECharacterMovementEnum::E_Idle;
+	bool forward_Moving = false;
+	bool right_Moving = false;
 	
 protected:
 	// Called when the game starts or when spawned
