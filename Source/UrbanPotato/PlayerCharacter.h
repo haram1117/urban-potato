@@ -57,7 +57,7 @@ public:
 	ECharacterMovementEnum CharacterMovementEnum = ECharacterMovementEnum::E_Idle;
 	bool forward_Moving = false;
 	bool right_Moving = false;
-
+	int ClearNum = 0;
 
 	
 protected:
@@ -97,6 +97,12 @@ public:
 	template<int32 slotNum>
 	void SetInventory_UsingItem();
 
+	UFUNCTION(BlueprintCallable)
+	void CheckAllPuzzlesFinished();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void PuzzleFinished();
+	
 	UFUNCTION(BlueprintImplementableEvent)
 	void SetInputMode();
 	UFUNCTION(BlueprintImplementableEvent)
@@ -111,7 +117,7 @@ public:
 	void SetPlayerController(AMyPlayerController* Controller);
 
 	FItemStruct* FindItemFromRow(int itemID);
-	
+
 	void RemoveFromItemInventory(FItemStruct* removeItem);
 
 	// void Respawn(AActor* actor);
