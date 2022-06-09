@@ -14,7 +14,7 @@ void AMyPlayerController::OnPossess(APawn* InPawn)
 	dialogWidget = CreateWidget<UNPC_dialog>(this, PlayerCharacter->dialogWidget);
 	if(InventoryWidget != nullptr)
 	{
-		InventoryWidget->AddToViewport();
+		// InventoryWidget->AddToViewport();
 		InventoryWidget->ButtonsInitialize();
 	}
 	if(dialogWidget != nullptr)

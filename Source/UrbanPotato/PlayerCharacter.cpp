@@ -5,6 +5,7 @@
 #include "Item.h"
 #include "ActorWithInteractions.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Kismet/KismetMathLibrary.h"
 // #include "Tasks/GameplayTask_SpawnActor.h"
 
 // Sets default values
@@ -35,6 +36,10 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &APlayerCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &APlayerCharacter::MoveRight);
+	PlayerInputComponent->BindAxis("Turn", this, &APlayerCharacter::Turn);
+	PlayerInputComponent->BindAxis("LookUp", this, &APlayerCharacter::LookUp);
+	PlayerInputComponent->BindAction("Inventory", IE_Pressed, this, &APlayerCharacter::ShowInventory);
+	PlayerInputComponent->BindAction("Inventory", IE_Released, this, &APlayerCharacter::HideInventory);
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &APlayerCharacter::JumpStart);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &APlayerCharacter::JumpEnd);
 	PlayerInputComponent->BindAction("Run", IE_Pressed, this, &APlayerCharacter::RunStart);
@@ -46,66 +51,66 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 void APlayerCharacter::MoveForward(float value)
 {
-	AddMovementInput(FVector(1, 0, 0), value * XAxis);
+	AddMovementInput(UKismetMathLibrary::GetForwardVector(GetControlRotation()), value);
 	CharacterMovementEnum = ECharacterMovementEnum::E_Walk;
-	if(CharacterMesh == nullptr)
-	{
-		return;
-	}
-	if(value > 0)
-	{
-		FRotator Rotator;
-		Rotator.Pitch = 0;
-		Rotator.Roll = 0;
-		Rotator.Yaw = -90 * XAxis;
-		CharacterMesh->SetRelativeRotation(Rotator);
-		CharacterMovementEnum = ECharacterMovementEnum::E_Walk;
-		
-	}else if(value < 0)
-	{
-		FRotator Rotator;
-		Rotator.Pitch = 0;
-		Rotator.Roll = 0;
-		Rotator.Yaw = -270 * XAxis;
-		CharacterMesh->SetRelativeRotation(Rotator);
-		CharacterMovementEnum = ECharacterMovementEnum::E_Walk;
-	}
-	else
-	{
-		CharacterMovementEnum = ECharacterMovementEnum::E_Idle; 
-	}
+	// if(CharacterMesh == nullptr)
+	// {
+	// 	return;
+	// }
+	// if(value > 0)
+	// {
+	// 	FRotator Rotator;
+	// 	Rotator.Pitch = 0;
+	// 	Rotator.Roll = 0;
+	// 	Rotator.Yaw = -90 * XAxis;
+	// 	CharacterMesh->SetRelativeRotation(Rotator);
+	// 	CharacterMovementEnum = ECharacterMovementEnum::E_Walk;
+	// 	
+	// }else if(value < 0)
+	// {a
+	// 	FRotator Rotator;
+	// 	Rotator.Pitch = 0;
+	// 	Rotator.Roll = 0;
+	// 	Rotator.Yaw = -270 * XAxis;
+	// 	CharacterMesh->SetRelativeRotation(Rotator);
+	// 	CharacterMovementEnum = ECharacterMovementEnum::E_Walk;
+	// }
+	// else
+	// {
+	// 	CharacterMovementEnum = ECharacterMovementEnum::E_Idle; 
+	// }
 }
 
 void APlayerCharacter::MoveRight(float value)
 {
-	AddMovementInput(FVector(0, 1, 0), value * YAxis);
-	if(CharacterMesh == nullptr)
-	{
-		return;
-	}
-	if(value > 0)
-	{
-		FRotator Rotator;
-		Rotator.Pitch = 0;
-		Rotator.Roll = 0;
-		if(YAxis == 1)
-			Rotator.Yaw = 0;
-		else
-			Rotator.Yaw = -180;
-		CharacterMesh->SetRelativeRotation(Rotator);
+	AddMovementInput(UKismetMathLibrary::GetRightVector(GetControlRotation()), value);
+	// if(CharacterMesh == nullptr)
+	// {
+	// 	return;
+	// }
+	// if(value > 0)
+	// {
+	// 	FRotator Rotator;
+	// 	Rotator.Pitch = 0;
+	// 	Rotator.Roll = 0;
+	// 	if(YAxis == 1)
+	// 		Rotator.Yaw = 0;
+	// 	else
+	// 		Rotator.Yaw = -180;
+	// 	CharacterMesh->SetRelativeRotation(Rotator);
 		CharacterMovementEnum = ECharacterMovementEnum::E_Walk;
-	}else if(value < 0)
-	{
-		FRotator Rotator;
-		Rotator.Pitch = 0;
-		Rotator.Roll = 0;
-		if(YAxis == 1)
-			Rotator.Yaw = -180;
-		else
-			Rotator.Yaw = 0;
-		CharacterMesh->SetRelativeRotation(Rotator);
-		CharacterMovementEnum = ECharacterMovementEnum::E_Walk;
-	}
+	// }else if(value < 0)
+	// {
+	// 	FRotator Rotator;
+	// 	Rotator.Pitch = 0;
+	// 	Rotator.Roll = 0;
+	// 	if(YAxis == 1)
+	// 		Rotator.Yaw = -180;
+	// 	else
+	// 		Rotator.Yaw = 0;
+	// 	CharacterMesh->SetRelativeRotation(Rotator);
+	// 	CharacterMovementEnum = ECharacterMovementEnum::E_Walk;
+	// }
 }
 
 void APlayerCharacter::JumpStart()
@@ -132,6 +137,31 @@ void APlayerCharacter::RunEnd()
 	bPressedRun = false;
 	GetCharacterMovement()->MaxWalkSpeed = 600;
 	CharacterMovementEnum = ECharacterMovementEnum::E_Walk;
+}
+
+void APlayerCharacter::Turn(float value)
+{
+	AddControllerYawInput(value);
+}
+
+void APlayerCharacter::LookUp(float value)
+{
+	AddControllerPitchInput(value);
+}
+
+void APlayerCharacter::ShowInventory()
+{
+	PlayerController->InventoryWidget->AddToViewport();
+	PlayerController->bShowMouseCursor = true;
+	SetInputMode();
+}
+
+void APlayerCharacter::HideInventory()
+{
+	PlayerController->InventoryWidget->RemoveFromViewport();
+	PlayerController->bShowMouseCursor = false;
+	
+	UnSetInputMode();
 }
 
 void APlayerCharacter::Interact()
@@ -250,7 +280,7 @@ void APlayerCharacter::SetItemInBoundary(AItem* item)
 			if(loopCount >= 100)
 			{
 				UE_LOG(LogTemp, Error, TEXT("Over1"));
-				return;
+				break;
 			}
 		}
 		tempItem->nextOverlap = item;	
@@ -284,7 +314,7 @@ void APlayerCharacter::UnSetItemInBoundary(AItem* item)
 		{
 			tempItem = tempItem->nextOverlap;
 			if(tempItem == nullptr)
-				return;
+				break;
 		}
 		loopCount++;
 		if(loopCount >= 100)
@@ -308,15 +338,15 @@ void APlayerCharacter::SetInteractActorInBoundary(AActorWithInteractions* actor)
 			tempActor = tempActor->nextOverlap;
 			if(tempActor == nullptr)
 				break;
+			loopCount++;
+			if(loopCount >= 100)
+			{
+				UE_LOG(LogTemp, Error, TEXT("Over3"));
+				break;
+			}
 		}
 		tempActor->nextOverlap = actor;
 		
-		loopCount++;
-		if(loopCount >= 100)
-		{
-			UE_LOG(LogTemp, Error, TEXT("Over3"));
-			return;
-		}
 	}
 	else
 	{
@@ -353,7 +383,7 @@ void APlayerCharacter::UnSetInteractActorInBoundary(AActorWithInteractions* acto
 		if(loopCount >= 100)
 		{
 			UE_LOG(LogTemp, Error, TEXT("Over4"));
-			return;
+			break;
 		}
 	}
 	actor->nextOverlap = nullptr;

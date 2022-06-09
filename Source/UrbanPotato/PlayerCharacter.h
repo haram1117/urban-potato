@@ -82,6 +82,16 @@ public:
 	void RunStart();
 	void RunEnd();
 
+	void Turn(float value);
+	void LookUp(float value);
+
+	void ShowInventory();
+	void HideInventory();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void SetInputMode();
+	UFUNCTION(BlueprintImplementableEvent)
+	void UnSetInputMode();
 	void Interact();
 
 	UFUNCTION(BlueprintNativeEvent)

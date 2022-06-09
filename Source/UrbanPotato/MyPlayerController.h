@@ -21,7 +21,7 @@ class URBANPOTATO_API AMyPlayerController : public APlayerController
 
 	virtual void OnPossess(APawn* InPawn) override;
 public:
-	
+	UPROPERTY(BlueprintReadWrite)
 	UInventoryWidget* InventoryWidget;
 	UitemPanel* itemPanel;
 	UPROPERTY(BlueprintReadOnly)
