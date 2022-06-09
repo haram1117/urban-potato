@@ -204,6 +204,15 @@ void APlayerCharacter::HideInventory()
 	UnSetInputMode();
 }
 
+void APlayerCharacter::CheckAllPuzzlesFinished()
+{
+	ClearNum++;
+	if(ClearNum >= 3)
+	{
+		PuzzleFinished();
+	}
+}
+
 
 void APlayerCharacter::Interact()
 {
