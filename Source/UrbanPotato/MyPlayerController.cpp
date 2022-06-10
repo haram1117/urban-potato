@@ -10,8 +10,10 @@ void AMyPlayerController::OnPossess(APawn* InPawn)
 	Super::OnPossess(InPawn);
 	APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(this->GetCharacter());
 	PlayerCharacter->SetPlayerController(this);
-	InventoryWidget = CreateWidget<UInventoryWidget>(this, PlayerCharacter->inventoryWidget);
-	dialogWidget = CreateWidget<UNPC_dialog>(this, PlayerCharacter->dialogWidget);
+	if(PlayerCharacter->inventoryWidget != nullptr)
+		InventoryWidget = CreateWidget<UInventoryWidget>(this, PlayerCharacter->inventoryWidget);
+	if(PlayerCharacter->dialogWidget != nullptr)
+		dialogWidget = CreateWidget<UNPC_dialog>(this, PlayerCharacter->dialogWidget);
 	if(InventoryWidget != nullptr)
 	{
 		// InventoryWidget->AddToViewport();

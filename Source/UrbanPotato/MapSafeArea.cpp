@@ -7,7 +7,6 @@
 #include "Components/SplineComponent.h"
 #include "Components/SplineMeshComponent.h"
 #include "Kismet/GameplayStatics.h"
-#include "Tasks/GameplayTask_SpawnActor.h"
 
 // Sets default values
 AMapSafeArea::AMapSafeArea()

@@ -26,11 +26,12 @@ void AChap1_SeeSaw::BeginPlay()
 	{
 		DicesValue.Add(0);
 	}
-	UBlueprintGeneratedClass* key_BP =
-		LoadObject<UBlueprintGeneratedClass>(NULL,
-			TEXT("Blueprint'/Game/Base/BP/Item_key.Item_key_C'"), NULL, LOAD_None, NULL);
-	UClass* key_class = Cast<UClass>(key_BP);
-	FerrisWheelKey = Cast<AItem>(UGameplayStatics::GetActorOfClass(GetWorld(), key_class));
+	// UBlueprintGeneratedClass* key_BP =
+	// 	LoadObject<UBlueprintGeneratedClass>(NULL,
+	// 		TEXT("Blueprint'/Game/Base/BP/Item_key.Item_key_C'"), NULL, LOAD_None, NULL);
+	// UClass* key_class = Cast<UClass>(key_BP);
+	// UGameplayStatics::GetAllActorsOfClassWithTag(GetWorld(), key_class, TEXT("seesaw"), ferris_array);
+	// FerrisWheelKey = Cast<AItem>(ferris_array[0]);
 }
 
 // Called every frame
@@ -49,8 +50,6 @@ void AChap1_SeeSaw::NotifyActorBeginOverlap(AActor* OtherActor)
 			WidgetComponent->SetVisibility(true);
 		}
 		NPC_widget->SetVisibility(true);
-		Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0))->XAxis = -1;
-		Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0))->YAxis = -1;
 	}
 }
 
@@ -61,8 +60,6 @@ void AChap1_SeeSaw::NotifyActorEndOverlap(AActor* OtherActor)
 	{
 		WidgetComponent->SetVisibility(false);
 		NPC_widget->SetVisibility(false);
-		Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0))->XAxis = 1;
-		Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0))->YAxis = 1;
 	}
 }
 
@@ -116,7 +113,8 @@ void AChap1_SeeSaw::SeeSawClear()
 	DicesWidgetOff();
 	NPCWidget_BP->ClearUpdate();
 	// Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0))->AddtoItemInventory(FerrisWheelKey);
-	FerrisWheelKey->SetActorHiddenInGame(false);
-	FerrisWheelKey->SetActorEnableCollision(true);
-	FerrisWheelKey->StaticMeshComponent->SetEnableGravity(true);
+	
+	// FerrisWheelKey->SetActorHiddenInGame(false);
+	// FerrisWheelKey->SetActorEnableCollision(true);
+	// FerrisWheelKey->StaticMeshComponent->SetEnableGravity(true);
 }

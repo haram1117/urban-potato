@@ -36,7 +36,7 @@ public:
 	bool IsSeeSawFinished = false;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	AItem* FerrisWheelKey;
-	
+	TArray<AActor*> ferris_array;
 
 protected:
 	// Called when the game starts or when spawned
