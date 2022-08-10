@@ -25,10 +25,11 @@ void AActorWithInteractions::NotifyActorBeginOverlap(AActor* OtherActor)
 	Super::NotifyActorBeginOverlap(OtherActor);
 	if(OtherActor == Cast<AActor>(PlayerCharacter) && !isWidgetVisible)
 	{
-		if(WidgetOffFlag)
+		if(isClear)
 			return;
-		widget->SetVisibility(true);
-		isWidgetVisible = true;
+		// widget->SetVisibility(true);
+		// isWidgetVisible = true;
+		WidgetOn();
 		PlayerCharacter->SetInteractActorInBoundary(this);
 	}
 }
@@ -39,12 +40,12 @@ void AActorWithInteractions::NotifyActorEndOverlap(AActor* OtherActor)
 	
 	if(OtherActor == Cast<AActor>(PlayerCharacter) && isWidgetVisible)
 	{
-		if(WidgetOffFlag)
+		if(isClear)
 			return;
-		widget->SetVisibility(false);
-		isWidgetVisible = false;
+		// widget->SetVisibility(false);
+		// isWidgetVisible = false;
+		WidgetOff();
 		PlayerCharacter->UnSetInteractActorInBoundary(this);
-		GaugeWidgetOff();
 	}
 }
 
@@ -58,5 +59,13 @@ void AActorWithInteractions::Tick(float DeltaTime)
 void AActorWithInteractions::WidgetOff()
 {
 	widget->SetVisibility(false);
+	isWidgetVisible = false;
+	GaugeWidgetOff();
+}
+
+void AActorWithInteractions::WidgetOn()
+{
+	widget->SetVisibility(true);
+	isWidgetVisible = true;
 }
 

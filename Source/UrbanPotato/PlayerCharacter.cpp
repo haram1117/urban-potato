@@ -79,33 +79,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 void APlayerCharacter::MoveForward(float value)
 {
 	AddMovementInput(UKismetMathLibrary::GetForwardVector(GetControlRotation()), value);
-	
-	// if(CharacterMesh == nullptr)
-	// {
-	// 	return;
-	// }
-	// if(value > 0)
-	// {
-	// 	FRotator Rotator;
-	// 	Rotator.Pitch = 0;
-	// 	Rotator.Roll = 0;
-	// 	Rotator.Yaw = -90 * XAxis;
-	// 	CharacterMesh->SetRelativeRotation(Rotator);
-	// 	CharacterMovementEnum = ECharacterMovementEnum::E_Walk;
-	// 	
-	// }else if(value < 0)
-	// {a
-	// 	FRotator Rotator;
-	// 	Rotator.Pitch = 0;
-	// 	Rotator.Roll = 0;
-	// 	Rotator.Yaw = -270 * XAxis;
-	// 	CharacterMesh->SetRelativeRotation(Rotator);
-	// 	CharacterMovementEnum = ECharacterMovementEnum::E_Walk;
-	// }
-	// else
-	// {
-	// 	CharacterMovementEnum = ECharacterMovementEnum::E_Idle; 
-	// }
+
 	if(value == 0)
 		forward_Moving = false;
 	else
@@ -118,32 +92,6 @@ void APlayerCharacter::MoveForward(float value)
 void APlayerCharacter::MoveRight(float value)
 {
 	AddMovementInput(UKismetMathLibrary::GetRightVector(GetControlRotation()), value);
-	// if(CharacterMesh == nullptr)
-	// {
-	// 	return;
-	// }
-	// if(value > 0)
-	// {
-	// 	FRotator Rotator;
-	// 	Rotator.Pitch = 0;
-	// 	Rotator.Roll = 0;
-	// 	if(YAxis == 1)
-	// 		Rotator.Yaw = 0;
-	// 	else
-	// 		Rotator.Yaw = -180;
-	// 	CharacterMesh->SetRelativeRotation(Rotator);
-	// }else if(value < 0)
-	// {
-	// 	FRotator Rotator;
-	// 	Rotator.Pitch = 0;
-	// 	Rotator.Roll = 0;
-	// 	if(YAxis == 1)
-	// 		Rotator.Yaw = -180;
-	// 	else
-	// 		Rotator.Yaw = 0;
-	// 	CharacterMesh->SetRelativeRotation(Rotator);
-	// 	CharacterMovementEnum = ECharacterMovementEnum::E_Walk;
-	// }
 	if(value == 0)
 		right_Moving = false;
 	else
@@ -249,7 +197,6 @@ void APlayerCharacter::AddtoItemInventory(AItem* Item)
 	{
 		FItemStruct* ItemStruct = itemDatabase->FindRow<FItemStruct>(*FString::FromInt(Item->itemID), TEXT(""));
 		ItemStruct->Item = Item;
-		// ItemStruct->Item->itemCount++;
 		ItemStruct->Item->ChangeItemCount(1);
 		inventory.Add(ItemStruct);
 		PlayerController->SetSlotItemToEmptySlot(ItemStruct); // 빈 slot에 아이템 넣기
@@ -257,7 +204,6 @@ void APlayerCharacter::AddtoItemInventory(AItem* Item)
 	{
 		FItemStruct* ItemStruct = FindInInventoryWithID(Item->itemID);
 		ItemStruct->Item->SetNextItem(Item);
-		// ItemStruct->Item->itemCount++;
 		ItemStruct->Item->ChangeItemCount(1);
 		PlayerController->SetSlotItemToEmptySlot(ItemStruct); // 빈 slot에 아이템 넣기
 	}
@@ -281,7 +227,6 @@ void APlayerCharacter::RemoveFromItemInventory(FItemStruct* removeItem)
 	{
 		if(Button == removeItem->Item->ItemSlot)
 		{
-			// removeItem->Item->ChangeItemCount(-1);
 			if(removeItem->Item->next == nullptr) // 남는 템 없음
 			{
 				Button->RemoveSlotItem();
@@ -318,127 +263,32 @@ void APlayerCharacter::GoInsideMap(FVector location, FRotator Rotator)
 }
 void APlayerCharacter::SetItemInBoundary(AItem* item)
 {
-	AItem* tempItem	= ItemInBoundary;
 	if(ItemInBoundary != nullptr)
-	{
-		int loopCount = 0;
-		while(tempItem->nextOverlap != nullptr)
-		{
-			tempItem = tempItem->nextOverlap;
-			if(tempItem == nullptr)
-				return;
-			loopCount++;
-			if(loopCount >= 100)
-			{
-				UE_LOG(LogTemp, Error, TEXT("Over1"));
-				return;
-			}
-		}
-		tempItem->nextOverlap = item;
-	}
-	else
-	{
-		ItemInBoundary = item;
-	}
+		UnSetItemInBoundary(ItemInBoundary);
+	
+	ItemInBoundary = item;
+	item->WidgetOn();
 }
 
 void APlayerCharacter::UnSetItemInBoundary(AItem* item)
 {
-	AItem* tempItem = ItemInBoundary;
-	if(tempItem == nullptr)
-		return;
-	int loopCount = 0;
-	while (tempItem->nextOverlap != nullptr)
-	{
-		if(tempItem == item)
-		{
-			if(item->nextOverlap != nullptr)
-			{
-				// tempItem->next = item->next;
-				tempItem = item->nextOverlap;
-			}
-			item->nextOverlap = nullptr;
-			ItemInBoundary = tempItem;
-			return;
-		}
-		else
-		{
-			tempItem = tempItem->nextOverlap;
-			if(tempItem == nullptr)
-				return;
-		}
-		loopCount++;
-		if(loopCount >= 100)
-		{
-			UE_LOG(LogTemp, Error, TEXT("Over2"));
-			return;
-		}
-	}
-	item->nextOverlap = nullptr;
 	ItemInBoundary = nullptr;
+	item->WidgetOff();
 }
 
 void APlayerCharacter::SetInteractActorInBoundary(AActorWithInteractions* actor)
 {
-	AActorWithInteractions* tempActor = ActorInBoundary;
+	//만약 ActorInBoundary에 이미 actor가 존재하면
 	if(ActorInBoundary != nullptr)
-	{
-		int loopCount = 0;
-		while(tempActor->nextOverlap != nullptr)
-		{
-			tempActor = tempActor->nextOverlap;
-			if(tempActor == nullptr)
-				break;
-			loopCount++;
-			if(loopCount >= 100)
-			{
-				UE_LOG(LogTemp, Error, TEXT("Over3"));
-				return;
-			}
-		}
-		tempActor->nextOverlap = actor;
-		
-	}
-	else
-	{
-		ActorInBoundary = actor;
-	}
+		UnSetInteractActorInBoundary(ActorInBoundary); // 해당 actor unset
+	ActorInBoundary = actor; // 현재 boundary에 들어온 actor를 ActorInBoundary로 설정하기
+	actor->WidgetOn();
 }
 
 void APlayerCharacter::UnSetInteractActorInBoundary(AActorWithInteractions* actor)
 {
-	AActorWithInteractions* tempActor = ActorInBoundary;
-	if(tempActor == nullptr)
-		return;
-	int loopCount = 0;
-	while (tempActor->nextOverlap != nullptr)
-	{
-		if(tempActor == actor)
-		{
-			if(actor->nextOverlap != nullptr)
-			{
-				// tempActor->next = actor->next;
-				tempActor = actor->nextOverlap;
-			}
-			actor->nextOverlap = nullptr;
-			ActorInBoundary = tempActor;
-			return;
-		}
-		else
-		{
-			tempActor = tempActor->nextOverlap;
-			if(tempActor == nullptr)
-				break;
-		}
-		loopCount++;
-		if(loopCount >= 100)
-		{
-			UE_LOG(LogTemp, Error, TEXT("Over4"));
-			return;
-		}
-	}
-	actor->nextOverlap = nullptr;
 	ActorInBoundary = nullptr;
+	actor->WidgetOff();
 }
 
 FItemStruct* APlayerCharacter::FindInInventoryWithID(int id)

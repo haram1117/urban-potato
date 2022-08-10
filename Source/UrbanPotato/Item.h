@@ -55,6 +55,16 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void RemoveFromInventory_Item(APlayerCharacter* PlayerCharacter);
 	AItem* GetNextItem();
+
+	/**
+	 * @brief Item의 "줍기 F" 위젯 끄기
+	 */
+	void WidgetOff();
+	
+	/**
+	 * @brief Item의 "줍기 F" 위젯 켜기
+	 */
+	void WidgetOn();
 };
 
 USTRUCT(Atomic, BlueprintType)
