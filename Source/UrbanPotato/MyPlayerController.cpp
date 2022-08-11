@@ -10,6 +10,10 @@ void AMyPlayerController::OnPossess(APawn* InPawn)
 	Super::OnPossess(InPawn);
 	APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(this->GetCharacter());
 	PlayerCharacter->SetPlayerController(this);
+	// sound_controller = new SoundController();
+
+	// playDialog_delegate.BindSP(sound_controller, &SoundController::PlayDialogSound);
+	
 	if(PlayerCharacter->inventoryWidget != nullptr)
 		InventoryWidget = CreateWidget<UInventoryWidget>(this, PlayerCharacter->inventoryWidget);
 	if(PlayerCharacter->dialogWidget != nullptr)
