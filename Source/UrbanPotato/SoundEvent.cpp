@@ -2,6 +2,7 @@
 
 
 #include "SoundEvent.h"
+#include "MyPlayerController.h"
 #include "Kismet/GameplayStatics.h"
 
 SoundEvent::SoundEvent()
@@ -32,7 +33,11 @@ SoundEvent::~SoundEvent()
 {
 }
 
-// void SoundController::PlayDialogSound(AMyPlayerController* PlayerController)
-// {
-// 	// UGameplayStatics::PlaySound2D(PlayerController->GetCharacter(), DialogSound);
-// }
+void SoundEvent::PlayDialogSound(AMyPlayerController* PlayerController)
+{
+	// UGameplayStatics::PlaySound2D(PlayerController, DialogSound);
+	if(GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(-15, 1.0f, FColor::Blue, TEXT("Finally"));
+	}
+}

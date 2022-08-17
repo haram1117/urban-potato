@@ -2,18 +2,23 @@
 
 
 #include "MyPlayerController.h"
-
+#include "Templates/SharedPointer.h"
 #include "PlayerCharacter.h"
+
+AMyPlayerController::AMyPlayerController()
+{
+	sound_event = new SoundEvent();
+}
 
 void AMyPlayerController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
 	APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(this->GetCharacter());
 	PlayerCharacter->SetPlayerController(this);
-	// sound_controller = new SoundController();
-
-	// playDialog_delegate.BindSP(sound_controller, &SoundController::PlayDialogSound);
 	
+	TSharedRef<SoundEvent, ESPMode::ThreadSafe> SoundManager(sound_event);
+	playDialog_delegate.BindSP(SoundManager, &::SoundEvent::PlayDialogSound);
+	playDialog_delegate.Execute(this);
 	if(PlayerCharacter->inventoryWidget != nullptr)
 		InventoryWidget = CreateWidget<UInventoryWidget>(this, PlayerCharacter->inventoryWidget);
 	if(PlayerCharacter->dialogWidget != nullptr)
@@ -28,6 +33,7 @@ void AMyPlayerController::OnPossess(APawn* InPawn)
 		dialogWidget->AddToViewport();
 	}
 }
+
 
 void AMyPlayerController::SetSlotItemToEmptySlot(FItemStruct* ItemStruct)
 {

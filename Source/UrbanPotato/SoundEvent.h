@@ -3,9 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "MyPlayerController.h"
 
-
+class AMyPlayerController;
 /**
  * 
  */
@@ -31,6 +30,6 @@ private:
 	USoundWave* ClearSound;
 
 public:
-	// void PlayDialogSound(AMyPlayerController* PlayerController);
+	void PlayDialogSound(AMyPlayerController* PlayerController);
 	
 };

@@ -7,23 +7,22 @@
 #include "Item.h"
 #include "itemPanel.h"
 #include "NPC_dialog.h"
-#include "SoundEvent.h"
 #include "GameFramework/PlayerController.h"
 #include "Blueprint/UserWidget.h"
+#include "SoundEvent.h"
 #include "MyPlayerController.generated.h"
 
 /**
  * 
  */
 class AMyPlayerController;
-
 DECLARE_DELEGATE_OneParam(FPlayDialogDelegate, AMyPlayerController*);
 
 UCLASS()
 class URBANPOTATO_API AMyPlayerController : public APlayerController
 {
 	GENERATED_BODY()
-
+	AMyPlayerController();
 	virtual void OnPossess(APawn* InPawn) override;
 public:
 	UPROPERTY(BlueprintReadWrite)
@@ -31,7 +30,12 @@ public:
 	UitemPanel* itemPanel;
 	UPROPERTY(BlueprintReadOnly)
 	UNPC_dialog* dialogWidget;
-	void SetSlotItemToEmptySlot(FItemStruct* ItemStruct);
+
+	
 	// SoundEvent* soundEvent;
-	// FPlayDialogDelegate playDialog_delegate;
+	//
+	SoundEvent* sound_event;
+	
+	void SetSlotItemToEmptySlot(FItemStruct* ItemStruct);
+	FPlayDialogDelegate playDialog_delegate;
 };
