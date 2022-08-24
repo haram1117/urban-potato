@@ -31,13 +31,9 @@ SoundEvent::SoundEvent()
 
 SoundEvent::~SoundEvent()
 {
-}
+} 
 
 void SoundEvent::PlayDialogSound(AMyPlayerController* PlayerController)
 {
-	// UGameplayStatics::PlaySound2D(PlayerController, DialogSound);
-	if(GEngine)
-	{
-		GEngine->AddOnScreenDebugMessage(-15, 1.0f, FColor::Blue, TEXT("Finally"));
-	}
+	UGameplayStatics::PlaySound2D(PlayerController, DialogSound);
 }

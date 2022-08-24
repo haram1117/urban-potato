@@ -65,8 +65,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAction("8", IE_Pressed, this, &APlayerCharacter::SetInventory_UsingItem<8>);
 	PlayerInputComponent->BindAction("9", IE_Pressed, this, &APlayerCharacter::SetInventory_UsingItem<9>);
 	PlayerInputComponent->BindAction("0", IE_Pressed, this, &APlayerCharacter::SetInventory_UsingItem<0>);
-	PlayerInputComponent->BindAction("Inventory", IE_Pressed, this, &APlayerCharacter::ShowInventory);
-	PlayerInputComponent->BindAction("Inventory", IE_Released, this, &APlayerCharacter::HideInventory);
+	PlayerInputComponent->BindAction("Inventory", IE_Pressed, this, &APlayerCharacter::InventoryWidgetSet);
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &APlayerCharacter::JumpStart);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &APlayerCharacter::JumpEnd);
 	PlayerInputComponent->BindAction("Run", IE_Pressed, this, &APlayerCharacter::RunStart);
@@ -129,27 +128,32 @@ void APlayerCharacter::RunEnd()
 
 void APlayerCharacter::Turn(float value)
 {
-	AddControllerYawInput(value);
+	if(!IsInventoryOpened)
+		AddControllerYawInput(value);
 }
 
 void APlayerCharacter::LookUp(float value)
 {
-	AddControllerPitchInput(value);
+	if(!IsInventoryOpened)
+		AddControllerPitchInput(value);
 }
 
-void APlayerCharacter::ShowInventory()
+void APlayerCharacter::InventoryWidgetSet()
 {
-	PlayerController->InventoryWidget->AddToViewport();
-	PlayerController->bShowMouseCursor = true;
-	SetInputMode();
-}
-
-void APlayerCharacter::HideInventory()
-{
-	PlayerController->InventoryWidget->RemoveFromViewport();
-	PlayerController->bShowMouseCursor = false;
-	
-	UnSetInputMode();
+	if(!IsInventoryOpened)
+	{
+		PlayerController->InventoryWidget->AddToViewport();
+		PlayerController->bShowMouseCursor = true;
+		SetInputMode();
+		IsInventoryOpened = true;
+	}
+	else
+	{
+		PlayerController->InventoryWidget->RemoveFromViewport();
+		PlayerController->bShowMouseCursor = false;
+		UnSetInputMode();
+		IsInventoryOpened = false;
+	}
 }
 
 void APlayerCharacter::CheckAllPuzzlesFinished()

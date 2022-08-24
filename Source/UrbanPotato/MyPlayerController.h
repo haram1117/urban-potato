@@ -9,14 +9,16 @@
 #include "NPC_dialog.h"
 #include "GameFramework/PlayerController.h"
 #include "Blueprint/UserWidget.h"
-#include "SoundEvent.h"
 #include "MyPlayerController.generated.h"
 
 /**
  * 
  */
+class SoundEvent;
 class AMyPlayerController;
 DECLARE_DELEGATE_OneParam(FPlayDialogDelegate, AMyPlayerController*);
+
+inline FPlayDialogDelegate playDialog_delegate;
 
 UCLASS()
 class URBANPOTATO_API AMyPlayerController : public APlayerController
@@ -27,7 +29,7 @@ class URBANPOTATO_API AMyPlayerController : public APlayerController
 public:
 	UPROPERTY(BlueprintReadWrite)
 	UInventoryWidget* InventoryWidget;
-	UitemPanel* itemPanel;
+	UitemPanel* ItemPanel;
 	UPROPERTY(BlueprintReadOnly)
 	UNPC_dialog* dialogWidget;
 
@@ -36,6 +38,6 @@ public:
 	//
 	SoundEvent* sound_event;
 	
-	void SetSlotItemToEmptySlot(FItemStruct* ItemStruct);
-	FPlayDialogDelegate playDialog_delegate;
-};
+	void SetSlotItemToEmptySlot(FItemStruct* ItemStruct) const;
+	void PlaySound(USoundWave* sound) const;
+};  

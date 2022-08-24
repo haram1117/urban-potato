@@ -58,6 +58,7 @@ public:
 	bool forward_Moving = false;
 	bool right_Moving = false;
 	int ClearNum = 0;
+	bool IsInventoryOpened = false;
 
 	
 protected:
@@ -91,8 +92,7 @@ public:
 	void Turn(float value);
 	void LookUp(float value);
 
-	void ShowInventory();
-	void HideInventory();
+	void InventoryWidgetSet();
 
 	template<int32 slotNum>
 	void SetInventory_UsingItem();
