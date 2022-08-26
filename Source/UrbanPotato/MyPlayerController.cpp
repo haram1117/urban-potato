@@ -2,14 +2,23 @@
 
 
 #include "MyPlayerController.h"
-
+#include "SoundEvent.h"
 #include "PlayerCharacter.h"
+
+AMyPlayerController::AMyPlayerController()
+{
+	sound_event = new SoundEvent();
+}
 
 void AMyPlayerController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
 	APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(this->GetCharacter());
 	PlayerCharacter->SetPlayerController(this);
+
+	playDialog_delegate.BindRaw(sound_event, &SoundEvent::PlayDialogSound);
+
+	
 	if(PlayerCharacter->inventoryWidget != nullptr)
 		InventoryWidget = CreateWidget<UInventoryWidget>(this, PlayerCharacter->inventoryWidget);
 	if(PlayerCharacter->dialogWidget != nullptr)
@@ -25,7 +34,8 @@ void AMyPlayerController::OnPossess(APawn* InPawn)
 	}
 }
 
-void AMyPlayerController::SetSlotItemToEmptySlot(FItemStruct* ItemStruct)
+
+void AMyPlayerController::SetSlotItemToEmptySlot(FItemStruct* ItemStruct) const
 {
 	if(InventoryWidget != nullptr)
 	{
@@ -57,4 +67,9 @@ void AMyPlayerController::SetSlotItemToEmptySlot(FItemStruct* ItemStruct)
 	{
 		UE_LOG(LogTemp, Error, TEXT("HI"));
 	}
+}
+
+void AMyPlayerController::PlaySound(USoundWave* sound) const
+{
+	UGameplayStatics::PlaySound2D(this, sound);
 }

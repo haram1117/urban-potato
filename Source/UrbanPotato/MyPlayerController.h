@@ -14,17 +14,30 @@
 /**
  * 
  */
+class SoundEvent;
+class AMyPlayerController;
+DECLARE_DELEGATE_OneParam(FPlayDialogDelegate, AMyPlayerController*);
+
+inline FPlayDialogDelegate playDialog_delegate;
+
 UCLASS()
 class URBANPOTATO_API AMyPlayerController : public APlayerController
 {
 	GENERATED_BODY()
-
+	AMyPlayerController();
 	virtual void OnPossess(APawn* InPawn) override;
 public:
 	UPROPERTY(BlueprintReadWrite)
 	UInventoryWidget* InventoryWidget;
-	UitemPanel* itemPanel;
+	UitemPanel* ItemPanel;
 	UPROPERTY(BlueprintReadOnly)
 	UNPC_dialog* dialogWidget;
-	void SetSlotItemToEmptySlot(FItemStruct* ItemStruct);
-};
+	
+	
+	// SoundEvent* soundEvent;
+	//
+	SoundEvent* sound_event;
+	
+	void SetSlotItemToEmptySlot(FItemStruct* ItemStruct) const;
+	void PlaySound(USoundWave* sound) const;
+};  

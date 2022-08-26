@@ -16,9 +16,8 @@ public:
 	// Sets default values for this actor's properties
 	AActorWithInteractions();
 	UWidgetComponent* widget;
-	AActorWithInteractions* nextOverlap = nullptr;
 	UPROPERTY(BlueprintReadWrite)
-	bool WidgetOffFlag = false;
+	bool isClear = false;
 	
 protected:
 	// Called when the game starts or when spawned
@@ -38,5 +37,7 @@ public:
 	void GaugeWidgetOff();
 	UFUNCTION(BlueprintCallable)
 	void WidgetOff();
+	UFUNCTION(BlueprintCallable)
+	void WidgetOn();
 
 };
