@@ -28,9 +28,17 @@ void AItem::NotifyActorBeginOverlap(AActor* OtherActor)
 	APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(OtherActor);
 	if(OtherActor == Cast<AActor>(PlayerCharacter) && !isWidgetVisible)
 	{
-		widget->SetVisibility(true);
-		isWidgetVisible = true;
 		PlayerCharacter->SetItemInBoundary(this);
+	}
+}
+
+void AItem::NotifyActorEndOverlap(AActor* OtherActor)
+{
+	Super::NotifyActorEndOverlap(OtherActor);
+	APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(OtherActor);
+	if(OtherActor == Cast<AActor>(PlayerCharacter) && isWidgetVisible)
+	{
+		PlayerCharacter->UnSetItemInBoundary(this);
 	}
 }
 
@@ -107,14 +115,15 @@ AItem* AItem::GetNextItem()
 	return next;
 }
 
-void AItem::NotifyActorEndOverlap(AActor* OtherActor)
+void AItem::WidgetOff()
 {
-	Super::NotifyActorEndOverlap(OtherActor);
-	APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(OtherActor);
-	if(OtherActor == Cast<AActor>(PlayerCharacter) && isWidgetVisible)
-	{
-		widget->SetVisibility(false);
-		isWidgetVisible = false;
-		PlayerCharacter->UnSetItemInBoundary(this);
-	}
+	widget->SetVisibility(false);
+	isWidgetVisible = false;
 }
+
+void AItem::WidgetOn()
+{
+	widget->SetVisibility(true);
+	isWidgetVisible = true;
+}
+
