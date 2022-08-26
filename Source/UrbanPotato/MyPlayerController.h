@@ -32,7 +32,7 @@ public:
 	UitemPanel* ItemPanel;
 	UPROPERTY(BlueprintReadOnly)
 	UNPC_dialog* dialogWidget;
-
+	
 	
 	// SoundEvent* soundEvent;
 	//

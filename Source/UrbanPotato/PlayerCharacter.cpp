@@ -5,6 +5,7 @@
 #include "ActorWithInteractions.h"
 #include "Item.h"
 #include "ActorWithInteractions.h"
+#include "NPC.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 // #include "Tasks/GameplayTask_SpawnActor.h"
@@ -73,6 +74,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAction("Interaction", IE_Pressed, this, &APlayerCharacter::Interact);
 	PlayerInputComponent->BindAction("Respawn", IE_Pressed, this, &APlayerCharacter::Respawn);
 	PlayerInputComponent->BindAction("GetItem", IE_Pressed, this, &APlayerCharacter::GetItem);
+	PlayerInputComponent->BindAction("Talk", IE_Pressed, this, &APlayerCharacter::Talk);
 }
 
 void APlayerCharacter::MoveForward(float value)
@@ -153,6 +155,14 @@ void APlayerCharacter::InventoryWidgetSet()
 		PlayerController->bShowMouseCursor = false;
 		UnSetInputMode();
 		IsInventoryOpened = false;
+	}
+}
+
+void APlayerCharacter::Talk()
+{
+	if(NPCInBoundary != nullptr)
+	{
+		NPCInBoundary->Talk();
 	}
 }
 
@@ -267,6 +277,7 @@ void APlayerCharacter::GoInsideMap(FVector location, FRotator Rotator)
 }
 void APlayerCharacter::SetItemInBoundary(AItem* item)
 {
+	AllWidgetsOff();
 	if(ItemInBoundary != nullptr)
 		UnSetItemInBoundary(ItemInBoundary);
 	
@@ -280,8 +291,23 @@ void APlayerCharacter::UnSetItemInBoundary(AItem* item)
 	item->WidgetOff();
 }
 
+void APlayerCharacter::SetNPCInBoundary(ANPC* npc)
+{
+	if(NPCInBoundary != nullptr)
+		UnSetNPCInBoundary(NPCInBoundary);
+	NPCInBoundary = npc;
+	npc->WidgetOn();
+}
+
+void APlayerCharacter::UnSetNPCInBoundary(ANPC* npc)
+{
+	NPCInBoundary = nullptr;
+	npc->WidgetOff();
+}
+
 void APlayerCharacter::SetInteractActorInBoundary(AActorWithInteractions* actor)
 {
+	AllWidgetsOff();
 	//만약 ActorInBoundary에 이미 actor가 존재하면
 	if(ActorInBoundary != nullptr)
 		UnSetInteractActorInBoundary(ActorInBoundary); // 해당 actor unset
@@ -293,6 +319,14 @@ void APlayerCharacter::UnSetInteractActorInBoundary(AActorWithInteractions* acto
 {
 	ActorInBoundary = nullptr;
 	actor->WidgetOff();
+}
+
+void APlayerCharacter::AllWidgetsOff() const
+{
+	if(ActorInBoundary != nullptr)
+		ActorInBoundary->WidgetOff();
+	if(ItemInBoundary != nullptr)
+		ItemInBoundary->WidgetOff();
 }
 
 FItemStruct* APlayerCharacter::FindInInventoryWithID(int id)

@@ -3,6 +3,9 @@
 
 #include "NPC.h"
 
+#include "Kismet/GameplayStatics.h"
+#include "PlayerCharacter.h"
+
 // Sets default values
 ANPC::ANPC()
 {
@@ -15,17 +18,27 @@ ANPC::ANPC()
 void ANPC::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	PlayerCharacter = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+	widget = Cast<UWidgetComponent>(GetDefaultSubobjectByName(TEXT("Widget")));
+
 }
 
 void ANPC::NotifyActorBeginOverlap(AActor* OtherActor)
 {
 	Super::NotifyActorBeginOverlap(OtherActor);
+	if(OtherActor == Cast<AActor>(PlayerCharacter) && !isWidgetVisible)
+	{
+		PlayerCharacter->SetNPCInBoundary(this);
+	}
 }
 
 void ANPC::NotifyActorEndOverlap(AActor* OtherActor)
 {
 	Super::NotifyActorEndOverlap(OtherActor);
+	if(OtherActor == Cast<AActor>(PlayerCharacter) && isWidgetVisible)
+	{
+		PlayerCharacter->UnSetNPCInBoundary(this);
+	}
 }
 
 // Called every frame
@@ -33,5 +46,17 @@ void ANPC::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void ANPC::WidgetOff()
+{
+	widget->SetVisibility(false);
+	isWidgetVisible = false;
+}
+
+void ANPC::WidgetOn()
+{
+	widget->SetVisibility(true);
+	isWidgetVisible = true;
 }
 

@@ -16,7 +16,6 @@ public:
 	// Sets default values for this actor's properties
 	AActorWithInteractions();
 	UWidgetComponent* widget;
-	AActorWithInteractions* nextOverlap = nullptr;
 	UPROPERTY(BlueprintReadWrite)
 	bool isClear = false;
 	
