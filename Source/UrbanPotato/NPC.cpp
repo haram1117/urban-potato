@@ -29,6 +29,8 @@ void ANPC::NotifyActorBeginOverlap(AActor* OtherActor)
 	if(OtherActor == Cast<AActor>(PlayerCharacter) && !isWidgetVisible)
 	{
 		PlayerCharacter->SetNPCInBoundary(this);
+		if(avoidStart)
+			AvoidCharacter();
 	}
 }
 
