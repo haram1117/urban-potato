@@ -61,20 +61,55 @@ public:
 	UPROPERTY(meta=(BindWidget))
 	class UTextBlock* text9;
 	
+	/**
+	 * @brief Inventory의 ItemSlot Container
+	 */
 	UPROPERTY(EditAnywhere)
 	TArray<UItemSlot*> Buttons;
+	
+	/**
+	 * @brief Inventory의 textBlock(SlotNum) Container
+	 */
 	TArray<UTextBlock*> TextBlocks;
+	
+	/**
+	 * @brief ToolTip Widget Class
+	 */
 	UClass* widget_itemTooltipClass;
+	
+	/**
+	 * @brief Inventory Slot Num 텍스트 기본 색상
+	 */
 	FSlateColor InitColor;
+	
+	/**
+	 * @brief 해당 Slot 선택 시 Inventory Slot Num 텍스트 색상
+	 */
 	FSlateColor UsingColor;
 	
-	TSubclassOf<UitemPanel> itempanel;
+	// TSubclassOf<UitemPanel> itempanel;
+
+	/**
+	 * @brief 각 Slot Button Initialization
+	 */
 	void ButtonsInitialize();
 
+	/**
+	 * @brief 캐릭터의 현재 사용 아이템 Set
+	 * @param slotID 사용할 아이템의 SlotID
+	 */
 	UFUNCTION(BlueprintCallable)
 	void SetCharacterUsingItem(int slotID);
 
+	/**
+	 * @brief 아이템 획득/사용에 따른 Slot 변화 Update
+	 * @param slotIndex Update할 해당 Slot Index 
+	 */
 	void UpdateSlot(int slotIndex);
+	
+	/**
+	 * @brief 비 선택 시 모든 TextBlock의 색상 기본값 복원
+	 */
 	void ReSetTextBlockColor();
 
 };

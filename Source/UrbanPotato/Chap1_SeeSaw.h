@@ -17,26 +17,65 @@ class URBANPOTATO_API AChap1_SeeSaw : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AChap1_SeeSaw();
-	// UStaticMeshComponent* MassTable;
+	/**
+	 * @brief 시소 바디 Static Mesh
+	 */
 	UStaticMeshComponent* Body;
+	
+	/**
+	 * @brief Overlap Widget Componenet
+	 */
 	UWidgetComponent* WidgetComponent;
+
+	/**
+	 * @brief NPC Overlap Widget Component
+	 */
 	UWidgetComponent* NPC_widget;
+
+	/**
+	 * @brief NPC_widget Blueprint
+	 */
 	UNPC_widget* NPCWidget_BP;
+	
+	/**
+	 * @brief 주사위 퍼즐 Success 조건
+	 */
 	UPROPERTY(BlueprintReadWrite)
 	int DiceNum = 29;
+
+	/**
+	 * @brief interaction 주사위 활성화를 위한 index
+	 */
 	int dicePosIndex = 0;
+	
+	/**
+	 * @brief 현재 주사위 value
+	 */
 	int TotalDiceValue = 0;
+
+	/**
+	 * @brief 각 주사위 별 value 값
+	 */
 	UPROPERTY(BlueprintReadWrite)
 	TArray<int> DicesValue;
+
+	/**
+	 * @brief 모든 주사위가 시소 위에 있는 지 판별
+	 */
 	UPROPERTY(BlueprintReadWrite)
 	bool AllDiceOnSeeSaw = false;
-	UPROPERTY(BlueprintReadWrite)
-	ACameraActor* SeeSawCamera;
+	
+	/**
+	 * @brief 시소 퍼즐 clear
+	 */
 	UPROPERTY(BlueprintReadWrite)
 	bool IsSeeSawFinished = false;
+	
+	/**
+	 * @brief 관람차 건전지 
+	 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	AItem* FerrisWheelKey;
-	TArray<AActor*> ferris_array;
 
 protected:
 	// Called when the game starts or when spawned
@@ -47,14 +86,29 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
 	virtual void NotifyActorEndOverlap(AActor* OtherActor) override;
+	
+	/**
+	 * @brief 캐릭터와의 interaction 가능 여부 판단
+	 */
 	UFUNCTION(BlueprintCallable)
 	bool CanInteract();
-	UFUNCTION(BlueprintCallable)
-	int GetDiceValue(int value);
+
+	/**
+	 * @brief Set TotalDiceValue
+	 * @param index dice Index
+	 * @param value dice Value
+	 */
 	UFUNCTION(BlueprintCallable)
 	void SetDiceValue(int index, int value);
-	void SetBodyRotation();
+	
+	/**
+	 * @brief 시소 퍼즐 클리어 시 수행
+	 */
 	void SeeSawClear();
+	
+	/**
+	 * @brief Dice 상호작용 Widget Off
+	 */
 	UFUNCTION(BlueprintImplementableEvent)
 	void DicesWidgetOff();
 };

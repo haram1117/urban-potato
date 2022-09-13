@@ -18,6 +18,10 @@
 		{
 			"Name": "Sketchfab",
 			"Enabled": false
+		},
+		{
+			"Name": "MovieRenderPipeline",
+			"Enabled": true
 		}
 	]
 }

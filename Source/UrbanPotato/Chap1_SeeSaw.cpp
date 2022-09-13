@@ -2,7 +2,6 @@
 
 
 #include "Chap1_SeeSaw.h"
-#include "Math/UnrealMathUtility.h"
 #include "PlayerCharacter.h"
 
 // Sets default values
@@ -17,7 +16,6 @@ AChap1_SeeSaw::AChap1_SeeSaw()
 void AChap1_SeeSaw::BeginPlay()
 {
 	Super::BeginPlay();
-	// MassTable = Cast<UStaticMeshComponent>(GetDefaultSubobjectByName(TEXT("MassTable")));
 	Body = Cast<UStaticMeshComponent>(GetDefaultSubobjectByName(TEXT("Body")));
 	WidgetComponent = Cast<UWidgetComponent>(GetDefaultSubobjectByName(TEXT("Widget")));
 	NPC_widget = Cast<UWidgetComponent>(GetDefaultSubobjectByName(TEXT("NPC_widget")));
@@ -67,11 +65,6 @@ bool AChap1_SeeSaw::CanInteract()
 	}
 }
 
-int AChap1_SeeSaw::GetDiceValue(int value)
-{
-	return DiceNum -= value;
-}
-
 void AChap1_SeeSaw::SetDiceValue(int index, int value)
 {
 	DicesValue[index] = value;
@@ -82,22 +75,10 @@ void AChap1_SeeSaw::SetDiceValue(int index, int value)
 	}
 	TotalDiceValue = total;
 	NPCWidget_BP->Update(TotalDiceValue);
-	SetBodyRotation();
 	if(DiceNum - TotalDiceValue == 0)
 	{
 		SeeSawClear();	
 	}
-}
-
-void AChap1_SeeSaw::SetBodyRotation()
-{
-	float difference = DiceNum - TotalDiceValue;
-	FRotator Rotator;
-	Rotator.Roll = Body->GetComponentRotation().Roll;
-	Rotator.Pitch = (-1) * difference/8.0;
-	Rotator.Yaw = Body->GetComponentRotation().Yaw;
-	
-	Body->SetRelativeRotation(Rotator);
 }
 
 void AChap1_SeeSaw::SeeSawClear()
