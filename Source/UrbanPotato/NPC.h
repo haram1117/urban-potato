@@ -26,6 +26,8 @@ protected:
 	APlayerCharacter* PlayerCharacter;
 	UPROPERTY(BlueprintReadWrite)
 	bool isWidgetVisible = false;
+	UPROPERTY(BlueprintReadWrite)
+	bool avoidStart = false;
 	
 public:	
 	// Called every frame
@@ -36,5 +38,7 @@ public:
 	void WidgetOff();
 	UFUNCTION(BlueprintCallable)
 	void WidgetOn();
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void AvoidCharacter();
 
 };
