@@ -51,7 +51,7 @@ void APlayerCharacter::Tick(float DeltaTime)
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
+	_PlayerInputComponent = PlayerInputComponent;
 	PlayerInputComponent->BindAxis("MoveForward", this, &APlayerCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &APlayerCharacter::MoveRight);
 	PlayerInputComponent->BindAxis("Turn", this, &APlayerCharacter::Turn);
@@ -271,9 +271,12 @@ void APlayerCharacter::Respawn()
 void APlayerCharacter::GoInsideMap(FVector location, FRotator Rotator)
 {
 	PlayerController = Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
-	APlayerCharacter* nowPlayer = this;
-	nowPlayer->SetActorLocation(location);
-	nowPlayer->SetActorRotation(Rotator);
+	if(IsUsingMapArea)
+	{
+		APlayerCharacter* nowPlayer = this;
+		nowPlayer->SetActorLocation(location);
+		nowPlayer->SetActorRotation(Rotator);
+	}
 }
 void APlayerCharacter::SetItemInBoundary(AItem* item)
 {
@@ -319,6 +322,38 @@ void APlayerCharacter::UnSetInteractActorInBoundary(AActorWithInteractions* acto
 {
 	ActorInBoundary = nullptr;
 	actor->WidgetOff();
+}
+
+void APlayerCharacter::SetIsUsingMapArea(bool flag)
+{
+	IsUsingMapArea = flag;
+}
+
+bool APlayerCharacter::GetIsUsingMapArea() const
+{
+	return IsUsingMapArea;
+}
+
+void APlayerCharacter::SetInputModeActive()
+{
+	IsInputModeActive = true;
+	ActiveInputComponent();
+}
+
+void APlayerCharacter::SetInputModeInactive()
+{
+	IsInputModeActive = false;
+	InActiveInputComponent();
+}
+
+void APlayerCharacter::ActiveInputComponent()
+{
+	Cast<AActor>(this)->EnableInput(PlayerController);
+}
+
+void APlayerCharacter::InActiveInputComponent()
+{
+	Cast<AActor>(this)->DisableInput(PlayerController);
 }
 
 void APlayerCharacter::AllWidgetsOff() const
