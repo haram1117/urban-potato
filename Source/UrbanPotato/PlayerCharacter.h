@@ -121,6 +121,22 @@ public:
 	 */
 	bool IsInventoryOpened = false;
 
+
+	/**
+	 * @brief Map Safe Area Using Trigger
+	 */
+	bool IsUsingMapArea = true;
+
+	/**
+	 * @brief 입력 감지 활성화 여부
+	 */
+	bool IsInputModeActive = true;
+
+	/**
+	 * @brief PlayerInputComponent 저장
+	 */
+	UInputComponent* _PlayerInputComponent = nullptr;
+	
 	bool forward_Moving = false;
 	bool right_Moving = false;
 	
@@ -198,7 +214,24 @@ public:
 	void SetInteractActorInBoundary(AActorWithInteractions* actor);
 	UFUNCTION(BlueprintCallable)
 	void UnSetInteractActorInBoundary(AActorWithInteractions* actor);
+	
+	UFUNCTION(BlueprintCallable)
+	void SetIsUsingMapArea(bool flag);
+	
+	UFUNCTION(BlueprintCallable)
+	bool GetIsUsingMapArea() const;
 
+	UFUNCTION(BlueprintCallable)
+	void SetInputModeActive();
+
+	UFUNCTION(BlueprintCallable)
+	void SetInputModeInactive();
+
+	UFUNCTION(BlueprintCallable)
+	void ActiveInputComponent();
+	UFUNCTION(BlueprintCallable)
+	void InActiveInputComponent();
+	
 	void AllWidgetsOff() const;
 	
 	FItemStruct* FindInInventoryWithID(int id);

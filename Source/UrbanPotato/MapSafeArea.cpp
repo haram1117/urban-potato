@@ -28,8 +28,6 @@ void AMapSafeArea::NotifyActorEndOverlap(AActor* OtherActor)
 	Super::NotifyActorEndOverlap(OtherActor);
 	if(OtherActor == Cast<AActor>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0)))
 	{
-		int num = SplineComponent->GetNumberOfSplinePoints();
-		UE_LOG(LogTemp, Error, TEXT("HIHIHI"));
 		FVector playerLoc = UGameplayStatics::GetPlayerPawn(GetWorld(), 0)->GetActorLocation();
 		FRotator playerRot = UGameplayStatics::GetPlayerPawn(GetWorld(), 0)->GetActorRotation();
 		float distance = FVector::Dist(SplineComponent->GetLocationAtSplinePoint(0, ESplineCoordinateSpace::World), playerLoc);
@@ -57,12 +55,7 @@ void AMapSafeArea::Tick(float DeltaTime)
 	if(distance_temp <= 100.0f) //checkpoint 도달 & SplinePoint set
 	{
 		PlayerCharacter->Splinepoint ++;
-		// UE_LOG(LogTemp, Error, TEXT("%d"), PlayerCharacter->Splinepoint);
 	}
-	// if(GEngine)
-	// {
-	// 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, FString::SanitizeFloat(distance_temp));
-	// }
 }
 
 void AMapSafeArea::SetPlayerCharacter(APlayerCharacter* _player)
