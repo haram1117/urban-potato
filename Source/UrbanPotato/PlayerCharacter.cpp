@@ -351,7 +351,7 @@ void APlayerCharacter::ActiveInputComponent()
 	Cast<AActor>(this)->EnableInput(PlayerController);
 }
 
-void APlayerCharacter::InActiveInputComponent()
+void APlayerCharacter::InActiveInputComponent()  
 {
 	Cast<AActor>(this)->DisableInput(PlayerController);
 }
